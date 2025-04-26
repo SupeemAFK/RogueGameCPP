@@ -7,19 +7,23 @@ WINDOW* gameWin;
 WINDOW* uiWin;
 
 void initUI() {
-    setlocale(LC_ALL, "");  // Enable wide chars
+    setlocale(LC_ALL, "");
     initscr();
+    start_color();
     noecho();
     curs_set(0);
     cbreak();
     keypad(stdscr, TRUE);
     refresh();
 
+    //Init color
+    init_pair(1, COLOR_GREEN, COLOR_BLACK); 
+
     int screenHeight, screenWidth;
     getmaxyx(stdscr, screenHeight, screenWidth);
 
-    int gameWidth = MAP_WIDTH; // 80
-    int uiWidth = screenWidth - gameWidth; // remaining space
+    int gameWidth = MAP_WIDTH;
+    int uiWidth = screenWidth - gameWidth;
 
     gameWin = newwin(screenHeight, gameWidth, 0, 0);
     uiWin = newwin(screenHeight, uiWidth, 0, gameWidth);
@@ -34,7 +38,16 @@ void initUI() {
 void drawDungeon(WINDOW* win) {
     for (size_t y = 0; y < map.size(); ++y) {
         for (size_t x = 0; x < map[y].size(); ++x) {
+            char tile = map[y][x];
+            if (tile == '@') {
+                wattron(win, COLOR_PAIR(1));
+            }
+
+            //Draw tile
             mvwaddch(win, y + 1, x + 1, map[y][x]);
+
+            //Turn off color
+            wattroff(win, COLOR_PAIR(1));
         }
     }
     wrefresh(win);
@@ -72,12 +85,19 @@ void drawDialogue(WINDOW* win, int startY) {
     mvwprintw(win, startY + 1, 12, "Be careful ahead...");
 }
 
+void drawPlayerControl(WINDOW* win, int startY) {
+    mvwprintw(win, startY, 2, "<-------Control------->");
+    mvwprintw(win, startY + 1, 2, "W A S D to walk.");
+    mvwprintw(win, startY + 2, 2, "q to exit");
+}
+
 void updateUI() {
     werase(uiWin);
     box(uiWin, 0, 0);
 
     drawPlayerStatus(uiWin);
     drawDialogue(uiWin, 10);
+    drawPlayerControl(uiWin, 15);
 
     wrefresh(uiWin);
 }

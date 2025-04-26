@@ -40,6 +40,7 @@ int main() {
             movePlayer({ 1, 0 });
         }
 
+        //Always update game screen
         werase(gameWin);
         box(gameWin, 0, 0);
         drawDungeon(gameWin);
