@@ -22,16 +22,16 @@ bool Edge::operator>(const Edge& other) const {
 
 const int MAP_WIDTH = 80;
 const int MAP_HEIGHT = 20;
-const int ROOM_COUNT = 6;
+const int ROOM_COUNT = 15;
 const int MIN_ROOM_SIZE = 5;
-const int MAX_ROOM_SIZE = 15;
-const int ROOM_DISTANCE = 3;
+const int MAX_ROOM_SIZE = 10;
+const int ROOM_DISTANCE = 2;
 
 std::vector<std::string> map(MAP_HEIGHT, std::string(MAP_WIDTH, ' '));
 std::vector<Room> rooms;
 
 void drawRoom(const Room& room) {
-    // Draw walls
+    //Walls
     for (int i = room.x; i < room.x + room.width; ++i) {
         map[room.y][i] = '-';
         map[room.y + room.height - 1][i] = '-';
@@ -41,7 +41,7 @@ void drawRoom(const Room& room) {
         map[j][room.x + room.width - 1] = '|';
     }
 
-    // Draw floor
+    //Floor
     for (int j = room.y + 1; j < room.y + room.height - 1; ++j) {
         for (int i = room.x + 1; i < room.x + room.width - 1; ++i) {
             map[j][i] = '.';
@@ -114,7 +114,7 @@ std::vector<std::pair<int, int>> createMST() {
 void moveStickedCorridor(int& bendX, int& bendY, const Room& roomA, const Room& roomB) {
     int correctionX = 0, correctionY = 0;
 
-    // Adjust for roomA
+    //RoomA
     if (roomA.x == bendX + 1) correctionX = 2;
     else if (roomA.x + roomA.width == bendX) correctionX = -2;
     else if (roomA.x == bendX) correctionX = 1;
@@ -125,7 +125,7 @@ void moveStickedCorridor(int& bendX, int& bendY, const Room& roomA, const Room& 
     else if (roomA.y == bendY) correctionY = 1;
     else if (roomA.y + roomA.height == bendY + 1) correctionY = -1;
 
-    // Adjust for roomB
+    //RoomB
     if (roomB.x == bendX + 1) correctionX = 2;
     else if (roomB.x + roomB.width == bendX) correctionX = -2;
     else if (roomB.x == bendX) correctionX = 1;
@@ -151,28 +151,28 @@ void drawCorridor(const Room& a, const Room& b) {
 
     moveStickedCorridor(bendX, bendY, a, b);
 
-    // Handle starting point
+    //Handle starting point
     if (map[y1][x1] == '|' || map[y1][x1] == '-') {
         map[y1][x1] = '+';
     } else if (map[y1][x1] == ' ') {
         map[y1][x1] = '#';
     }
 
-    // First leg (horizontal)
+    //First leg (horizontal)
     int dx = (bendX > x1) ? 1 : -1;
     for (int x = x1 + dx; x != bendX + dx; x += dx) {
         if (map[y1][x] == ' ') map[y1][x] = '#';
         else if (map[y1][x] == '|' || map[y1][x] == '-') map[y1][x] = '+';
     }
 
-    // Handle bend point
+    //Handle bend point
     if (map[bendY][bendX] == '|' || map[bendY][bendX] == '-') {
         map[bendY][bendX] = '+';
     } else if (map[bendY][bendX] == ' ') {
         map[bendY][bendX] = '#';
     }
 
-    // Second leg (vertical)
+    //Second leg (vertical)
     int dy = (y2 > bendY) ? 1 : -1;
     for (int y = bendY + dy; y != y2 + dy; y += dy) {
         if (map[y][bendX] == ' ') map[y][bendX] = '#';
@@ -192,7 +192,7 @@ void clearDungeon() {
 
     for (int y = 0; y < MAP_HEIGHT; ++y) {
         for (int x = 0; x < MAP_WIDTH; ++x) {
-            map[y][x] = ' '; // empty space
+            map[y][x] = ' '; //empty space
         }
     }
 }

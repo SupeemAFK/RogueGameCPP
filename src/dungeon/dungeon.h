@@ -4,7 +4,6 @@
 #include <vector>
 #include <string>
 
-// Room structure
 struct Room {
     int x, y, width, height;
 
@@ -13,7 +12,6 @@ struct Room {
     bool intersects(const Room& other, int distance) const;
 };
 
-// Edge structure for MST
 struct Edge {
     int roomA, roomB;
     float weight;
@@ -21,7 +19,6 @@ struct Edge {
     bool operator>(const Edge& other) const;
 };
 
-// Constants
 extern const int MAP_WIDTH;
 extern const int MAP_HEIGHT;
 extern const int ROOM_COUNT;
@@ -29,11 +26,9 @@ extern const int MIN_ROOM_SIZE;
 extern const int MAX_ROOM_SIZE;
 extern const int ROOM_DISTANCE;
 
-// Global dungeon state
 extern std::vector<std::string> map;
 extern std::vector<Room> rooms;
 
-// Dungeon generation functions
 void drawRoom(const Room& room);
 float distance(const Room& a, const Room& b);
 void generateRooms();
