@@ -4,6 +4,8 @@
 #include <vector>
 
 extern int playerX, playerY;
+extern int playerCoin;
+extern int playerFloor;
 
 void clearPlayer();
 void randomSpawnPlayer();

@@ -1,4 +1,5 @@
 #include "../dungeon/dungeon.h"
+#include "../player/player.h"
 #include <iostream>
 #include <locale.h>
 #include <ncursesw/ncurses.h>
@@ -7,7 +8,7 @@ WINDOW* gameWin;
 WINDOW* uiWin;
 
 void initUI() {
-    setlocale(LC_ALL, "");
+    setlocale(LC_ALL, "en_US.UTF-8");
     initscr();
     start_color();
     noecho();
@@ -18,6 +19,8 @@ void initUI() {
 
     //Init color
     init_pair(1, COLOR_GREEN, COLOR_BLACK); 
+    init_pair(2, COLOR_YELLOW, COLOR_BLACK); 
+    init_pair(3, COLOR_BLUE, COLOR_BLACK); 
 
     int screenHeight, screenWidth;
     getmaxyx(stdscr, screenHeight, screenWidth);
@@ -42,12 +45,20 @@ void drawDungeon(WINDOW* win) {
             if (tile == '@') {
                 wattron(win, COLOR_PAIR(1));
             }
+            else if (tile == '$') {
+                wattron(win, COLOR_PAIR(2));
+            }
+            else if (tile == 'D') {
+                wattron(win, COLOR_PAIR(3));
+            }
 
             //Draw tile
             mvwaddch(win, y + 1, x + 1, map[y][x]);
 
             //Turn off color
             wattroff(win, COLOR_PAIR(1));
+            wattroff(win, COLOR_PAIR(2));
+            wattroff(win, COLOR_PAIR(3));
         }
     }
     wrefresh(win);
@@ -56,10 +67,11 @@ void drawDungeon(WINDOW* win) {
 void drawPlayerStatus(WINDOW* win) {
     int y = 1;
 
+    mvwprintw(win, y++, 2, "Floor: %d", playerFloor);
     mvwprintw(win, y++, 2, "Player:");
     mvwprintw(win, y++, 4, "Level: %d", 5);
     mvwprintw(win, y++, 4, "HP: %d/%d", 35, 50);
-    mvwprintw(win, y++, 4, "Coins: %d", 123);
+    mvwprintw(win, y++, 4, "Coins: %d", playerCoin);
     mvwprintw(win, y++, 2, "Inventory:");
     mvwprintw(win, y++, 4, "- HealingPotion x3");
     mvwprintw(win, y++, 4, "- Bomb x1");

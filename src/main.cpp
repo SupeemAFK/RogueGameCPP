@@ -1,6 +1,8 @@
 #include "./dungeon/dungeon.h"
 #include "./UI/ui.h"
 #include "./player/player.h"
+#include "./coin/coin.h"
+#include "./nextLevel/nextLevel.h"
 #include <ctime>
 
 int main() {
@@ -9,10 +11,11 @@ int main() {
     //Start
     generateDungeon();
     randomSpawnPlayer();
+    randomPlaceDoor();
+    randomPlaceCoins();
     initUI();
     drawDungeon(gameWin);
     updateUI();
-
 
     //Update
     int ch;
@@ -26,6 +29,8 @@ int main() {
             generateDungeon();
             clearPlayer();
             randomSpawnPlayer();
+            randomPlaceDoor();
+            randomPlaceCoins();
         }
         else if (ch == 'w' || ch == 'W') {
             movePlayer({ 0, -1 });

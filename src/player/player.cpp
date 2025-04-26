@@ -1,9 +1,13 @@
 #include <vector>
 #include "../dungeon/dungeon.h"
+#include "../nextLevel/nextlevel.h"
+#include "../coin/coin.h"
 
 using namespace std;
 
 int playerX = 0, playerY = 0;
+int playerCoin = 0;
+int playerFloor = 1;
 char previousTile;
 
 void clearPlayer() {
@@ -28,6 +32,19 @@ void movePlayer(vector<int> direction) {
     int newPositionY = playerY + direction[1];
 
     if (map[newPositionY][newPositionX] == '|' || map[newPositionY][newPositionX] == '-' || map[newPositionY][newPositionX] == ' ') {
+        return;
+    }
+    else if (map[newPositionY][newPositionX] == '$') {
+        playerCoin++;
+        map[newPositionY][newPositionX] = '.';
+    }
+    else if (map[newPositionY][newPositionX] == 'D') {
+        generateDungeon();
+        clearPlayer();
+        randomSpawnPlayer();
+        randomPlaceDoor();
+        randomPlaceCoins();
+        playerFloor++;
         return;
     }
 
