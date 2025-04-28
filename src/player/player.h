@@ -11,12 +11,13 @@ class Player {
         int playerX, playerY;
         int playerCoin;
         int playerFloor;
+        float maxHealth;
         
         Dungeon& dungeon;
         Coin& coin;
         NextLevel& door;
         
-        Player(Dungeon& _dungeon, Coin& _coin, NextLevel& _door, float maxHealth);
+        Player(Dungeon& _dungeon, Coin& _coin, NextLevel& _door, float _maxHealth);
 
         void clearPlayer();
         void randomSpawnPlayer();

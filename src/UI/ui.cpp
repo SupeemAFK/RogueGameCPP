@@ -68,7 +68,7 @@ void GameUI::drawPlayerStatus() {
     mvwprintw(uiWin, y++, 2, "Floor: %d", player.playerFloor);
     mvwprintw(uiWin, y++, 2, "Player:");
     mvwprintw(uiWin, y++, 4, "Level: %d", 5);
-    mvwprintw(uiWin, y++, 4, "HP: %d/%d", 35, 50);
+    mvwprintw(uiWin, y++, 4, "HP: %d/%d", (int)player.getCurrentHealth(), (int)player.maxHealth);
     mvwprintw(uiWin, y++, 4, "Coins: %d", player.playerCoin);
     mvwprintw(uiWin, y++, 2, "Inventory:");
     mvwprintw(uiWin, y++, 4, "- HealingPotion x3");

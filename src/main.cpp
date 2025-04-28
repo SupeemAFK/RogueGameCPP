@@ -1,6 +1,7 @@
 #include "./dungeon/dungeon.h"
 #include "./UI/ui.h"
 #include "./player/player.h"
+#include "./enemy/enemy.h"
 #include "./coin/coin.h"
 #include "./nextLevel/nextLevel.h"
 #include "./gameManager/gameManager.h"
@@ -36,15 +37,27 @@ int main() {
         }
         else if (ch == 'w' || ch == 'W') {
             player.movePlayer({ 0, -1 });
+            for (auto& enemy : gameManager.enemies) {
+                enemy.randomMoveMonster();
+            }
         }
         else if (ch == 's' || ch == 'S') {
             player.movePlayer({ 0, 1 });
+            for (auto& enemy : gameManager.enemies) {
+                enemy.randomMoveMonster();
+            }
         }
         else if (ch == 'a' || ch == 'A') {
             player.movePlayer({ -1, 0 });
+            for (auto& enemy : gameManager.enemies) {
+                enemy.randomMoveMonster();
+            }
         }
         else if (ch == 'd' || ch == 'D') {
             player.movePlayer({ 1, 0 });
+            for (auto& enemy : gameManager.enemies) {
+                enemy.randomMoveMonster();
+            }
         }
 
         ui.updateGameScreen(); //Always update game screen

@@ -1,11 +1,4 @@
 #include "./dungeon.h"
-#include <iostream>
-#include <vector>
-#include <queue>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
-#include <algorithm>
 
 int Room::centerX() const { return x + width / 2; }
 int Room::centerY() const { return y + height / 2; }

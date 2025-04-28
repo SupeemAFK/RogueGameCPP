@@ -3,13 +3,14 @@
 
 using namespace std;
 
-Player::Player(Dungeon& _dungeon, Coin& _coin, NextLevel& _door, float maxHealth) :
+Player::Player(Dungeon& _dungeon, Coin& _coin, NextLevel& _door, float _maxHealth) :
     playerX(0), 
     playerY(0), 
     playerCoin(0), 
     playerFloor(1), 
     previousTile('.'), 
-    health(maxHealth),
+    maxHealth(_maxHealth),
+    health(_maxHealth),
     dungeon(_dungeon), 
     coin(_coin), 
     door(_door)
@@ -53,6 +54,10 @@ void::Player::movePlayer(vector<int> direction) {
         door.randomPlaceDoor();
         coin.randomPlaceCoins();
         playerFloor++;
+        return;
+    }
+    //Check if enemy
+    else if (dungeon.map[newPositionY][newPositionX] == 'K') {
         return;
     }
 

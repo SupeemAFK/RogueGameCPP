@@ -2,26 +2,26 @@
 #define MONSTER_H
 
 #include "../player/player.h"
-#include <vector>
+#include "../dungeon/dungeon.h"
 
 class Enemy {
     public:
         int monsterX;
         int monsterY;
-
+        float damage = 10;
+        char previousTile = '.';
+        char monsterRender = 'K';
+        
         Dungeon& dungeon;
         Player& player;
-        Enemy(Player& _player, Dungeon& _dungeon, float maxHealth);
+        Enemy(Player& _player, Dungeon& _dungeon, float maxHealth, int _enemyX, int _enemyY);
         
-        void randomSpawnMonster();
-        void randomMoveMonster(std::vector<int> direction);
-        void monveToPlayer();
-        void attackPlayer();
+        void randomMoveMonster();
+        void moveToPlayer();
         void damaged(float damage);
         void die();
 
     private:
-        char previousTile;
         float health;
 };
 

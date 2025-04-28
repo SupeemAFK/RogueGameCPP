@@ -5,9 +5,14 @@
 #include "../coin/coin.h"
 #include "../nextLevel/nextLevel.h"
 #include "../player/player.h"
+#include "../enemy/enemy.h"
+#include <vector>
+
+using namespace std;
 
 class GameManager {
     public:
+        vector<Enemy> enemies;        
         Dungeon& dungeon;
         Coin& coins;
         NextLevel& door;
@@ -16,6 +21,7 @@ class GameManager {
 
         void startGame();
         void restartGame();
+        void randomEnemiesPlacement();
 };
 
 #endif

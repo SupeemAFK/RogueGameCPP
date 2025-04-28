@@ -1,8 +1,14 @@
 #ifndef DUNGEON_H
 #define DUNGEON_H
 
+#include <iostream>
 #include <vector>
 #include <string>
+#include <queue>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+#include <algorithm>
 
 struct Room {
     int x, y, width, height;

@@ -68,7 +68,3 @@ template <typename T, typename Compare>
 size_t PriorityQueue<T, Compare>::size() const {
     return heap.size();
 }
-
-// Explicit instantiation for Edge type
-#include "dungeon.h"
-template class PriorityQueue<Edge, std::greater<Edge>>;
