@@ -7,6 +7,7 @@ class NextLevel {
     public:
         Dungeon& dungeon;
         NextLevel(Dungeon& _dungeon);
+        
         void randomPlaceDoor();
 };
 

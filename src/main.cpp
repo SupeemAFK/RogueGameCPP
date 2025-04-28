@@ -3,6 +3,7 @@
 #include "./player/player.h"
 #include "./coin/coin.h"
 #include "./nextLevel/nextLevel.h"
+#include "./gameManager/gameManager.h"
 #include <ctime>
 #include <iostream>
 
@@ -13,13 +14,11 @@ int main() {
     Dungeon dungeon;
     Coin coin(dungeon);
     NextLevel nextLevelDoor(dungeon);
-    Player player(dungeon, coin, nextLevelDoor);
+    Player player(dungeon, coin, nextLevelDoor, 100);
+    GameManager gameManager(dungeon, coin, nextLevelDoor, player);
     GameUI ui(dungeon, player);
 
-    dungeon.generateDungeon();
-    player.randomSpawnPlayer();
-    nextLevelDoor.randomPlaceDoor();
-    coin.randomPlaceCoins();
+    gameManager.startGame();
     ui.initUI();
     ui.updateGameScreen();
     ui.updateUI();
@@ -33,11 +32,7 @@ int main() {
         }
         //Restart
         else if (ch == 'r' || ch == 'R') {
-            dungeon.generateDungeon();
-            player.clearPlayer();
-            player.randomSpawnPlayer();
-            nextLevelDoor.randomPlaceDoor();
-            coin.randomPlaceCoins();
+            gameManager.restartGame();
         }
         else if (ch == 'w' || ch == 'W') {
             player.movePlayer({ 0, -1 });
@@ -52,8 +47,8 @@ int main() {
             player.movePlayer({ 1, 0 });
         }
 
-        //Always update game screen
-        ui.updateGameScreen();
+        ui.updateGameScreen(); //Always update game screen
+        ui.updateUI(); //Always update UI
     }
 
     //End ncurses

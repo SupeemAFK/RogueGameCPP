@@ -3,12 +3,13 @@
 
 using namespace std;
 
-Player::Player(Dungeon& _dungeon, Coin& _coin, NextLevel& _door) :
+Player::Player(Dungeon& _dungeon, Coin& _coin, NextLevel& _door, float maxHealth) :
     playerX(0), 
     playerY(0), 
     playerCoin(0), 
     playerFloor(1), 
     previousTile('.'), 
+    health(maxHealth),
     dungeon(_dungeon), 
     coin(_coin), 
     door(_door)
@@ -35,13 +36,16 @@ void::Player::movePlayer(vector<int> direction) {
     int newPositionX = playerX + direction[0];
     int newPositionY = playerY + direction[1];
 
+    //Check if walls
     if (dungeon.map[newPositionY][newPositionX] == '|' || dungeon.map[newPositionY][newPositionX] == '-' || dungeon.map[newPositionY][newPositionX] == ' ') {
         return;
     }
+    //Check if coin
     else if (dungeon.map[newPositionY][newPositionX] == '$') {
         playerCoin++;
         dungeon.map[newPositionY][newPositionX] = '.';
     }
+    //Check if door
     else if (dungeon.map[newPositionY][newPositionX] == 'D') {
         dungeon.generateDungeon();
         clearPlayer();
@@ -57,4 +61,12 @@ void::Player::movePlayer(vector<int> direction) {
     playerY = newPositionY;
     previousTile = dungeon.map[playerY][playerX];
     dungeon.map[playerY][playerX] = '@';
+}
+
+void Player::damaged(float damage) {
+    health -= damage;
+}
+
+float Player::getCurrentHealth() {
+    return health;
 }

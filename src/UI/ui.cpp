@@ -116,5 +116,4 @@ void GameUI::updateGameScreen() {
     werase(gameWin);
     box(gameWin, 0, 0);
     drawDungeon();
-    updateUI();
 }

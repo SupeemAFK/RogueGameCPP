@@ -11,16 +11,22 @@ class Player {
         int playerX, playerY;
         int playerCoin;
         int playerFloor;
-        char previousTile;
+        
         Dungeon& dungeon;
         Coin& coin;
         NextLevel& door;
         
-        Player(Dungeon& _dungeon, Coin& _coin, NextLevel& _door);
+        Player(Dungeon& _dungeon, Coin& _coin, NextLevel& _door, float maxHealth);
 
         void clearPlayer();
         void randomSpawnPlayer();
         void movePlayer(std::vector<int> direction);
+        void damaged(float damage);
+        float getCurrentHealth();
+
+    private:
+        char previousTile;
+        float health;
 };
 
 #endif
