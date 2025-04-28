@@ -15,8 +15,6 @@ private:
 
 public:
     LinkedList();
-    ~LinkedList();
-
     void insert(const T& value);
     void remove(const T& value);
     void clearAll();

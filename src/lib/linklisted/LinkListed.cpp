@@ -7,11 +7,6 @@ template <typename T>
 LinkedList<T>::LinkedList() : head(nullptr) {}
 
 template <typename T>
-LinkedList<T>::~LinkedList() {
-    clearAll();
-}
-
-template <typename T>
 void LinkedList<T>::insert(const T& value) {
     head = new Node{value, head};
 }
@@ -54,6 +49,3 @@ void LinkedList<T>::display() const {
     }
     cout << endl;
 }
-
-template class LinkedList<int>;
-template class LinkedList<string>;

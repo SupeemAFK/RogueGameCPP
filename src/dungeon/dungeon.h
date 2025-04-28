@@ -3,12 +3,8 @@
 
 #include <iostream>
 #include <vector>
-#include <string>
 #include <queue>
 #include <cmath>
-#include <cstdlib>
-#include <ctime>
-#include <algorithm>
 
 struct Room {
     int x, y, width, height;
@@ -22,7 +18,6 @@ struct Edge {
     float weight;
     bool operator>(const Edge& other) const;
 };
-
 
 class Dungeon {
     public:
