@@ -34,11 +34,10 @@ class Dungeon {
 
         void clearDungeon();
         void generateDungeon();
-        void printMap();
 
     private:
         void drawRoom(const Room& room);
-        float distance(const Room& a, const Room& b);
+        float euclideanDist(const Room& a, const Room& b);
         void generateRooms();
         std::vector<std::pair<int, int>> createMST();
         void moveStickedCorridor(int& bendX, int& bendY, const Room& roomA, const Room& roomB);

@@ -48,16 +48,6 @@ void Dungeon::generateDungeon() {
     generateCorridors(mstEdges);
 }
 
-void Dungeon::printMap() {
-    for (size_t y = 0; y < map.size(); ++y) {
-        for (size_t x = 0; x < map[y].size(); ++x) {
-            char tile = map[y][x];
-            std::cout << tile;
-        }
-        std::cout << '\n';
-    }
-}
-
 void Dungeon::drawRoom(const Room& room) {
     //Walls
     for (int i = room.x; i < room.x + room.width; ++i) {
@@ -77,7 +67,7 @@ void Dungeon::drawRoom(const Room& room) {
     }
 }
 
-float Dungeon::distance(const Room& a, const Room& b) {
+float Dungeon::euclideanDist(const Room& a, const Room& b) {
     float dx = a.centerX() - b.centerX();
     float dy = a.centerY() - b.centerY();
     return std::sqrt(dx * dx + dy * dy);
@@ -117,7 +107,7 @@ std::vector<std::pair<int, int>> Dungeon::createMST() {
 
     inMST[0] = true;
     for (int i = 1; i < rooms.size(); ++i) {
-        pq.push({0, i, distance(rooms[0], rooms[i])});
+        pq.push({0, i, euclideanDist(rooms[0], rooms[i])});
     }
 
     while (!pq.empty()) {
@@ -131,7 +121,7 @@ std::vector<std::pair<int, int>> Dungeon::createMST() {
 
         for (int i = 0; i < rooms.size(); ++i) {
             if (!inMST[i]) {
-                pq.push({e.roomB, i, distance(rooms[e.roomB], rooms[i])});
+                pq.push({e.roomB, i, euclideanDist(rooms[e.roomB], rooms[i])});
             }
         }
     }
