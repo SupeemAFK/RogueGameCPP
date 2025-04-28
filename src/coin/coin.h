@@ -1,6 +1,13 @@
-#ifndef Coin_H
-#define Coin_H
+#ifndef COIN_H
+#define COIN_H
 
-void randomPlaceCoins();
+#include "../dungeon/dungeon.h"
+
+class Coin {
+    public:
+        Dungeon& dungeon;
+        Coin(Dungeon& _dungeon);
+        void randomPlaceCoins();
+};
 
 #endif

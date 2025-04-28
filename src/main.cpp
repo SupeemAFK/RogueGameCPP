@@ -4,18 +4,25 @@
 #include "./coin/coin.h"
 #include "./nextLevel/nextLevel.h"
 #include <ctime>
+#include <iostream>
 
 int main() {
     srand(time(0));
 
     //Start
-    generateDungeon();
-    randomSpawnPlayer();
-    randomPlaceDoor();
-    randomPlaceCoins();
-    initUI();
-    drawDungeon(gameWin);
-    updateUI();
+    Dungeon dungeon;
+    Coin coin(dungeon);
+    NextLevel nextLevelDoor(dungeon);
+    Player player(dungeon, coin, nextLevelDoor);
+    GameUI ui(dungeon, player);
+
+    dungeon.generateDungeon();
+    player.randomSpawnPlayer();
+    nextLevelDoor.randomPlaceDoor();
+    coin.randomPlaceCoins();
+    ui.initUI();
+    ui.drawDungeon();
+    ui.updateUI();
 
     //Update
     int ch;
@@ -26,30 +33,27 @@ int main() {
         }
         //Restart
         else if (ch == 'r' || ch == 'R') {
-            generateDungeon();
-            clearPlayer();
-            randomSpawnPlayer();
-            randomPlaceDoor();
-            randomPlaceCoins();
+            dungeon.generateDungeon();
+            player.clearPlayer();
+            player.randomSpawnPlayer();
+            nextLevelDoor.randomPlaceDoor();
+            coin.randomPlaceCoins();
         }
         else if (ch == 'w' || ch == 'W') {
-            movePlayer({ 0, -1 });
+            player.movePlayer({ 0, -1 });
         }
         else if (ch == 's' || ch == 'S') {
-            movePlayer({ 0, 1 });
+            player.movePlayer({ 0, 1 });
         }
         else if (ch == 'a' || ch == 'A') {
-            movePlayer({ -1, 0 });
+            player.movePlayer({ -1, 0 });
         }
         else if (ch == 'd' || ch == 'D') {
-            movePlayer({ 1, 0 });
+            player.movePlayer({ 1, 0 });
         }
 
         //Always update game screen
-        werase(gameWin);
-        box(gameWin, 0, 0);
-        drawDungeon(gameWin);
-        updateUI();
+        ui.updateGameScreen();
     }
 
     //End ncurses

@@ -1,16 +1,18 @@
-#include "../dungeon/dungeon.h"
+#include "./coin.h"
 #include <random>
 
 using namespace std;
 
-void randomPlaceCoins() {
-    if (rooms.empty()) return;
+Coin::Coin(Dungeon& _dungeon) : dungeon(_dungeon) {}
+
+void Coin::randomPlaceCoins() {
+    if (dungeon.rooms.empty()) return;
 
     random_device rd;
     mt19937 gen(rd());
     uniform_int_distribution<> distrib(0, 1);
 
-    for (const auto& room : rooms) {
+    for (const auto& room : dungeon.rooms) {
         int random_bit = distrib(gen);
         if (random_bit == 1) {
             int minX = room.x + 1; 
@@ -25,8 +27,8 @@ void randomPlaceCoins() {
             int randomX = x_distrib(gen);
             int randomY = y_distrib(gen);
 
-            if (map[randomY][randomX] != '-' && map[randomY][randomX] != '|') {
-                if (map[randomY][randomX] == '.') map[randomY][randomX] = '$';
+            if (dungeon.map[randomY][randomX] != '-' && dungeon.map[randomY][randomX] != '|') {
+                if (dungeon.map[randomY][randomX] == '.') dungeon.map[randomY][randomX] = '$';
             }
         }
     }
