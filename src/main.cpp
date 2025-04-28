@@ -3,19 +3,25 @@
 #include "./player/player.h"
 #include "./coin/coin.h"
 #include "./nextLevel/nextLevel.h"
+#include "./gameManager/gameManager.h"
 #include <ctime>
+#include <iostream>
 
 int main() {
     srand(time(0));
 
     //Start
-    generateDungeon();
-    randomSpawnPlayer();
-    randomPlaceDoor();
-    randomPlaceCoins();
-    initUI();
-    drawDungeon(gameWin);
-    updateUI();
+    Dungeon dungeon;
+    Coin coin(dungeon);
+    NextLevel nextLevelDoor(dungeon);
+    Player player(dungeon, coin, nextLevelDoor, 100);
+    GameManager gameManager(dungeon, coin, nextLevelDoor, player);
+    GameUI ui(dungeon, player);
+
+    gameManager.startGame();
+    ui.initUI();
+    ui.updateGameScreen();
+    ui.updateUI();
 
     //Update
     int ch;
@@ -26,30 +32,23 @@ int main() {
         }
         //Restart
         else if (ch == 'r' || ch == 'R') {
-            generateDungeon();
-            clearPlayer();
-            randomSpawnPlayer();
-            randomPlaceDoor();
-            randomPlaceCoins();
+            gameManager.restartGame();
         }
         else if (ch == 'w' || ch == 'W') {
-            movePlayer({ 0, -1 });
+            player.movePlayer({ 0, -1 });
         }
         else if (ch == 's' || ch == 'S') {
-            movePlayer({ 0, 1 });
+            player.movePlayer({ 0, 1 });
         }
         else if (ch == 'a' || ch == 'A') {
-            movePlayer({ -1, 0 });
+            player.movePlayer({ -1, 0 });
         }
         else if (ch == 'd' || ch == 'D') {
-            movePlayer({ 1, 0 });
+            player.movePlayer({ 1, 0 });
         }
 
-        //Always update game screen
-        werase(gameWin);
-        box(gameWin, 0, 0);
-        drawDungeon(gameWin);
-        updateUI();
+        ui.updateGameScreen(); //Always update game screen
+        ui.updateUI(); //Always update UI
     }
 
     //End ncurses

@@ -1,20 +1,22 @@
-#include "../dungeon/dungeon.h"
+#include "./nextLevel.h"
 
 using namespace std;
 
-void randomPlaceDoor() {
-    if (rooms.empty()) return;
+NextLevel::NextLevel(Dungeon& _dungeon) : dungeon(_dungeon) {}
 
-    const int maxAttempts = rooms.size();
+void NextLevel::randomPlaceDoor() {
+    if (dungeon.rooms.empty()) return;
+
+    const int maxAttempts = dungeon.rooms.size();
     for (int attempt = 0; attempt < maxAttempts; ++attempt) {
-        int randomRoomIndex = rand() % rooms.size();
-        const Room& room = rooms[randomRoomIndex];
+        int randomRoomIndex = rand() % dungeon.rooms.size();
+        const Room& room = dungeon.rooms[randomRoomIndex];
 
         int X = room.centerY();
         int Y = room.centerX();
 
-        if (map[X][Y] != '@') {
-            map[X][Y] = 'D'; 
+        if (dungeon.map[X][Y] != '@') {
+            dungeon.map[X][Y] = 'D'; 
             return;
         }
     }

@@ -1,14 +1,32 @@
-#ifndef Player_H
-#define Player_H
+#ifndef PLAYER_H
+#define PLAYER_H
 
 #include <vector>
+#include "../dungeon/dungeon.h"
+#include "../nextLevel/nextlevel.h"
+#include "../coin/coin.h"
 
-extern int playerX, playerY;
-extern int playerCoin;
-extern int playerFloor;
+class Player {
+    public:
+        int playerX, playerY;
+        int playerCoin;
+        int playerFloor;
+        
+        Dungeon& dungeon;
+        Coin& coin;
+        NextLevel& door;
+        
+        Player(Dungeon& _dungeon, Coin& _coin, NextLevel& _door, float maxHealth);
 
-void clearPlayer();
-void randomSpawnPlayer();
-void movePlayer(std::vector<int> direction);
+        void clearPlayer();
+        void randomSpawnPlayer();
+        void movePlayer(std::vector<int> direction);
+        void damaged(float damage);
+        float getCurrentHealth();
+
+    private:
+        char previousTile;
+        float health;
+};
 
 #endif

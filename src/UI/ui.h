@@ -2,14 +2,27 @@
 #define UI_H
 
 #include <ncursesw/ncurses.h>
+#include "../dungeon/dungeon.h"
+#include "../player/player.h"
 
-extern WINDOW* gameWin;
-extern WINDOW* uiWin;
+class GameUI {
+    public:
+        WINDOW* gameWin;
+        WINDOW* uiWin;
+        Dungeon& dungeon;
+        Player& player;
 
-void initUI();
-void drawDungeon(WINDOW* win);
-void drawPlayerStatus(WINDOW* win);
-void drawDialogue(WINDOW* win, int startY);
-void updateUI();
+        GameUI(Dungeon& _dungeon, Player& _player);
+
+        void initUI();
+        void updateUI();
+        void updateGameScreen();
+
+    private:
+        void drawDungeon();
+        void drawPlayerStatus();
+        void drawDialogue(int startY);
+        void drawPlayerControl(int startY);
+};
 
 #endif

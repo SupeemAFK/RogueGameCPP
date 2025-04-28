@@ -20,17 +20,35 @@ bool Edge::operator>(const Edge& other) const {
     return weight > other.weight;
 }
 
-const int MAP_WIDTH = 80;
-const int MAP_HEIGHT = 20;
-const int ROOM_COUNT = 15;
-const int MIN_ROOM_SIZE = 5;
-const int MAX_ROOM_SIZE = 10;
-const int ROOM_DISTANCE = 2;
+Dungeon::Dungeon():
+    MAP_WIDTH(80),
+    MAP_HEIGHT(20),
+    ROOM_COUNT(15),
+    MIN_ROOM_SIZE(5),
+    MAX_ROOM_SIZE(10),
+    ROOM_DISTANCE(2),
+    map(MAP_HEIGHT, std::string(MAP_WIDTH, ' '))
+{}
 
-std::vector<std::string> map(MAP_HEIGHT, std::string(MAP_WIDTH, ' '));
-std::vector<Room> rooms;
+void Dungeon::clearDungeon() {
+    srand(time(NULL));
+    rooms.clear();
 
-void drawRoom(const Room& room) {
+    for (int y = 0; y < MAP_HEIGHT; ++y) {
+        for (int x = 0; x < MAP_WIDTH; ++x) {
+            map[y][x] = ' '; //empty space
+        }
+    }
+}
+
+void Dungeon::generateDungeon() {
+    clearDungeon();
+    generateRooms();
+    auto mstEdges = createMST();
+    generateCorridors(mstEdges);
+}
+
+void Dungeon::drawRoom(const Room& room) {
     //Walls
     for (int i = room.x; i < room.x + room.width; ++i) {
         map[room.y][i] = '-';
@@ -49,13 +67,13 @@ void drawRoom(const Room& room) {
     }
 }
 
-float distance(const Room& a, const Room& b) {
+float Dungeon::euclideanDist(const Room& a, const Room& b) {
     float dx = a.centerX() - b.centerX();
     float dy = a.centerY() - b.centerY();
     return std::sqrt(dx * dx + dy * dy);
 }
 
-void generateRooms() {
+void Dungeon::generateRooms() {
     int attempts = 0;
     while (rooms.size() < ROOM_COUNT && attempts < 5000) {
         int w = MIN_ROOM_SIZE + rand() % (MAX_ROOM_SIZE - MIN_ROOM_SIZE + 1);
@@ -82,14 +100,14 @@ void generateRooms() {
     }
 }
 
-std::vector<std::pair<int, int>> createMST() {
+std::vector<std::pair<int, int>> Dungeon::createMST() {
     std::vector<std::pair<int, int>> mstEdges;
     std::priority_queue<Edge, std::vector<Edge>, std::greater<Edge>> pq;
     std::vector<bool> inMST(rooms.size(), false);
 
     inMST[0] = true;
     for (int i = 1; i < rooms.size(); ++i) {
-        pq.push({0, i, distance(rooms[0], rooms[i])});
+        pq.push({0, i, euclideanDist(rooms[0], rooms[i])});
     }
 
     while (!pq.empty()) {
@@ -103,7 +121,7 @@ std::vector<std::pair<int, int>> createMST() {
 
         for (int i = 0; i < rooms.size(); ++i) {
             if (!inMST[i]) {
-                pq.push({e.roomB, i, distance(rooms[e.roomB], rooms[i])});
+                pq.push({e.roomB, i, euclideanDist(rooms[e.roomB], rooms[i])});
             }
         }
     }
@@ -111,7 +129,7 @@ std::vector<std::pair<int, int>> createMST() {
     return mstEdges;
 }
 
-void moveStickedCorridor(int& bendX, int& bendY, const Room& roomA, const Room& roomB) {
+void Dungeon::moveStickedCorridor(int& bendX, int& bendY, const Room& roomA, const Room& roomB) {
     int correctionX = 0, correctionY = 0;
 
     //RoomA
@@ -140,7 +158,7 @@ void moveStickedCorridor(int& bendX, int& bendY, const Room& roomA, const Room& 
     bendY += correctionY;
 }
 
-void drawCorridor(const Room& a, const Room& b) {
+void Dungeon::drawCorridor(const Room& a, const Room& b) {
     int x1 = a.centerX();
     int y1 = a.centerY();
     int x2 = b.centerX();
@@ -180,43 +198,8 @@ void drawCorridor(const Room& a, const Room& b) {
     }
 }
 
-void generateCorridors(const std::vector<std::pair<int, int>>& edges) {
+void Dungeon::generateCorridors(const std::vector<std::pair<int, int>>& edges) {
     for (auto& edge : edges) {
         drawCorridor(rooms[edge.first], rooms[edge.second]);
     }
 }
-
-void clearDungeon() {
-    srand(time(NULL));
-    rooms.clear();
-
-    for (int y = 0; y < MAP_HEIGHT; ++y) {
-        for (int x = 0; x < MAP_WIDTH; ++x) {
-            map[y][x] = ' '; //empty space
-        }
-    }
-}
-
-void generateDungeon() {
-    clearDungeon();
-    generateRooms();
-    auto mstEdges = createMST();
-    generateCorridors(mstEdges);
-}
-
-void printMap() {
-    for (size_t y = 0; y < map.size(); ++y) {
-        for (size_t x = 0; x < map[y].size(); ++x) {
-            char tile = map[y][x];
-            std::cout << tile;
-        }
-        std::cout << '\n';
-    }
-}
-
-/*
-int main() {
-    srand(time(0));
-    generateDungeon();
-    printMap();
-}*/

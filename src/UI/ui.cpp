@@ -1,13 +1,11 @@
-#include "../dungeon/dungeon.h"
-#include "../player/player.h"
+#include "./ui.h"
 #include <iostream>
 #include <locale.h>
 #include <ncursesw/ncurses.h>
 
-WINDOW* gameWin;
-WINDOW* uiWin;
+GameUI::GameUI(Dungeon& _dungeon, Player& _player) : dungeon(_dungeon), player(_player) {}
 
-void initUI() {
+void GameUI::initUI() {
     setlocale(LC_ALL, "en_US.UTF-8");
     initscr();
     start_color();
@@ -25,7 +23,7 @@ void initUI() {
     int screenHeight, screenWidth;
     getmaxyx(stdscr, screenHeight, screenWidth);
 
-    int gameWidth = MAP_WIDTH;
+    int gameWidth = dungeon.MAP_WIDTH;
     int uiWidth = screenWidth - gameWidth;
 
     gameWin = newwin(screenHeight, gameWidth, 0, 0);
@@ -38,46 +36,46 @@ void initUI() {
     wrefresh(uiWin);
 }
 
-void drawDungeon(WINDOW* win) {
-    for (size_t y = 0; y < map.size(); ++y) {
-        for (size_t x = 0; x < map[y].size(); ++x) {
-            char tile = map[y][x];
+void GameUI::drawDungeon() {
+    for (size_t y = 0; y < dungeon.map.size(); ++y) {
+        for (size_t x = 0; x < dungeon.map[y].size(); ++x) {
+            char tile = dungeon.map[y][x];
             if (tile == '@') {
-                wattron(win, COLOR_PAIR(1));
+                wattron(gameWin, COLOR_PAIR(1));
             }
             else if (tile == '$') {
-                wattron(win, COLOR_PAIR(2));
+                wattron(gameWin, COLOR_PAIR(2));
             }
             else if (tile == 'D') {
-                wattron(win, COLOR_PAIR(3));
+                wattron(gameWin, COLOR_PAIR(3));
             }
 
             //Draw tile
-            mvwaddch(win, y + 1, x + 1, map[y][x]);
+            mvwaddch(gameWin, y + 1, x + 1, dungeon.map[y][x]);
 
             //Turn off color
-            wattroff(win, COLOR_PAIR(1));
-            wattroff(win, COLOR_PAIR(2));
-            wattroff(win, COLOR_PAIR(3));
+            wattroff(gameWin, COLOR_PAIR(1));
+            wattroff(gameWin, COLOR_PAIR(2));
+            wattroff(gameWin, COLOR_PAIR(3));
         }
     }
-    wrefresh(win);
+    wrefresh(gameWin);
 }
 
-void drawPlayerStatus(WINDOW* win) {
+void GameUI::drawPlayerStatus() {
     int y = 1;
 
-    mvwprintw(win, y++, 2, "Floor: %d", playerFloor);
-    mvwprintw(win, y++, 2, "Player:");
-    mvwprintw(win, y++, 4, "Level: %d", 5);
-    mvwprintw(win, y++, 4, "HP: %d/%d", 35, 50);
-    mvwprintw(win, y++, 4, "Coins: %d", playerCoin);
-    mvwprintw(win, y++, 2, "Inventory:");
-    mvwprintw(win, y++, 4, "- HealingPotion x3");
-    mvwprintw(win, y++, 4, "- Bomb x1");
+    mvwprintw(uiWin, y++, 2, "Floor: %d", player.playerFloor);
+    mvwprintw(uiWin, y++, 2, "Player:");
+    mvwprintw(uiWin, y++, 4, "Level: %d", 5);
+    mvwprintw(uiWin, y++, 4, "HP: %d/%d", 35, 50);
+    mvwprintw(uiWin, y++, 4, "Coins: %d", player.playerCoin);
+    mvwprintw(uiWin, y++, 2, "Inventory:");
+    mvwprintw(uiWin, y++, 4, "- HealingPotion x3");
+    mvwprintw(uiWin, y++, 4, "- Bomb x1");
 }
 
-void drawDialogue(WINDOW* win, int startY) {
+void GameUI::drawDialogue(int startY) {
     const char* asciiArt[] = {
         " (o_o) ",
         "<(   )>",
@@ -89,27 +87,33 @@ void drawDialogue(WINDOW* win, int startY) {
 
     // Draw ASCII art
     for (int i = 0; i < artHeight; ++i) {
-        mvwprintw(win, startY + i, 2, "%s", asciiArt[i]);
+        mvwprintw(uiWin, startY + i, 2, "%s", asciiArt[i]);
     }
 
     // Draw dialogue text next to art
-    mvwprintw(win, startY, 12, "Hello, adventurer!");
-    mvwprintw(win, startY + 1, 12, "Be careful ahead...");
+    mvwprintw(uiWin, startY, 12, "Hello, adventurer!");
+    mvwprintw(uiWin, startY + 1, 12, "Be careful ahead...");
 }
 
-void drawPlayerControl(WINDOW* win, int startY) {
-    mvwprintw(win, startY, 2, "<-------Control------->");
-    mvwprintw(win, startY + 1, 2, "W A S D to walk.");
-    mvwprintw(win, startY + 2, 2, "q to exit");
+void GameUI::drawPlayerControl(int startY) {
+    mvwprintw(uiWin, startY, 2, "<-------Control------->");
+    mvwprintw(uiWin, startY + 1, 2, "W A S D to walk.");
+    mvwprintw(uiWin, startY + 2, 2, "q to exit");
 }
 
-void updateUI() {
+void GameUI::updateUI() {
     werase(uiWin);
     box(uiWin, 0, 0);
 
-    drawPlayerStatus(uiWin);
-    drawDialogue(uiWin, 10);
-    drawPlayerControl(uiWin, 15);
+    drawPlayerStatus();
+    drawDialogue(10);
+    drawPlayerControl(15);
 
     wrefresh(uiWin);
+}
+
+void GameUI::updateGameScreen() {
+    werase(gameWin);
+    box(gameWin, 0, 0);
+    drawDungeon();
 }
