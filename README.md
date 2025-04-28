@@ -1,4 +1,4 @@
-# Rogue Game using C++
+# Rogue Game using C++ 🗡️
 
 ## Example gameplay
 ![Gameplay footage](/images/image.png)
