@@ -40,24 +40,28 @@ int main() {
             player.movePlayer({ 0, -1 });
             for (auto& enemy : gameManager.enemies) {
                 enemy.randomMoveMonster();
+                enemy.checkNextToPlayer();
             }
         }
         else if ((ch == 's' || ch == 'S') && !player.die) {
             player.movePlayer({ 0, 1 });
             for (auto& enemy : gameManager.enemies) {
                 enemy.randomMoveMonster();
+                enemy.checkNextToPlayer();
             }
         }
         else if ((ch == 'a' || ch == 'A') && !player.die) {
             player.movePlayer({ -1, 0 });
             for (auto& enemy : gameManager.enemies) {
                 enemy.randomMoveMonster();
+                enemy.checkNextToPlayer();
             }
         }
         else if ((ch == 'd' || ch == 'D') && !player.die) {
             player.movePlayer({ 1, 0 });
             for (auto& enemy : gameManager.enemies) {
                 enemy.randomMoveMonster();
+                enemy.checkNextToPlayer();
             }
         }
 

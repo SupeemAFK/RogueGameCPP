@@ -59,6 +59,7 @@ void::Player::movePlayer(vector<int> direction) {
     }
     //Check if enemy
     else if (dungeon.map[newPositionY][newPositionX] == 'K') {
+        //Attack enemy miss, chance etc..
         return;
     }
 

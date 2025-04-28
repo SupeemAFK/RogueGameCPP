@@ -18,6 +18,7 @@ class Enemy {
         
         void randomMoveMonster();
         void moveToPlayer();
+        void checkNextToPlayer();
         void damaged(float damage);
         void die();
 

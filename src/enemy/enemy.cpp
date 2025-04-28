@@ -33,7 +33,14 @@ void Enemy::randomMoveMonster() {
 
     //Check instances
     char nextTile = dungeon.map[newPositionY][newPositionX];
-    if (nextTile == '|' || nextTile == '-' || nextTile == ' ' || nextTile == '#' || nextTile == '+' || nextTile == '@') {
+    if (nextTile == '|' || 
+        nextTile == '-' || 
+        nextTile == ' ' || 
+        nextTile == '#' || 
+        nextTile == '+' || 
+        nextTile == '@' ||
+        nextTile == 'K'
+    ) {
         return; 
     }
 
@@ -42,15 +49,6 @@ void Enemy::randomMoveMonster() {
     monsterY = newPositionY;
     previousTile = dungeon.map[monsterY][monsterX];
     dungeon.map[monsterY][monsterX] = monsterRender; 
-
-    //Check if next to player
-    if ((monsterY > 0 && dungeon.map[monsterY - 1][monsterX] == '@') || // up
-    (monsterY + 1 < dungeon.map.size() && dungeon.map[monsterY + 1][monsterX] == '@') || // down
-    (monsterX > 0 && dungeon.map[monsterY][monsterX - 1] == '@') || // left
-    (monsterX + 1 < dungeon.map[0].size() && dungeon.map[monsterY][monsterX + 1] == '@')) // right
-    {
-        player.damaged(damage);
-    }
 }
 
 void Enemy::moveToPlayer() {
@@ -74,13 +72,15 @@ void Enemy::moveToPlayer() {
     monsterY = newPositionY;
     previousTile = dungeon.map[monsterY][monsterX];
     dungeon.map[monsterY][monsterX] = monsterRender; 
+}
 
-    //Check if next to player
+void Enemy::checkNextToPlayer() {
     if ((monsterY > 0 && dungeon.map[monsterY - 1][monsterX] == '@') || // up
     (monsterY + 1 < dungeon.map.size() && dungeon.map[monsterY + 1][monsterX] == '@') || // down
     (monsterX > 0 && dungeon.map[monsterY][monsterX - 1] == '@') || // left
     (monsterX + 1 < dungeon.map[0].size() && dungeon.map[monsterY][monsterX + 1] == '@')) // right
     {
+        //Attack player miss, chance etc..
         player.damaged(damage);
     }
 }
