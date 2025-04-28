@@ -11,6 +11,8 @@ class Player {
         int playerX, playerY;
         int playerCoin;
         int playerFloor;
+        int level;
+        bool die = false;
         float maxHealth;
         
         Dungeon& dungeon;
@@ -24,6 +26,7 @@ class Player {
         void movePlayer(std::vector<int> direction);
         void damaged(float damage);
         float getCurrentHealth();
+        void resetPlayer();
 
     private:
         char previousTile;

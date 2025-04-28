@@ -6,6 +6,7 @@ using namespace std;
 Player::Player(Dungeon& _dungeon, Coin& _coin, NextLevel& _door, float _maxHealth) :
     playerX(0), 
     playerY(0), 
+    level(1),
     playerCoin(0), 
     playerFloor(1), 
     previousTile('.'), 
@@ -70,8 +71,16 @@ void::Player::movePlayer(vector<int> direction) {
 
 void Player::damaged(float damage) {
     health -= damage;
+    if (health <= 0) die = true;
 }
 
 float Player::getCurrentHealth() {
     return health;
+}
+
+void Player::resetPlayer() {
+    health = maxHealth;
+    playerCoin = 0;
+    playerFloor = 1;
+    level = 1;
 }

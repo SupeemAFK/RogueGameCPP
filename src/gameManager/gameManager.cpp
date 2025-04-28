@@ -19,6 +19,7 @@ void GameManager::startGame() {
 void GameManager::restartGame() {
     dungeon.generateDungeon();
     player.clearPlayer();
+    player.resetPlayer();
     player.randomSpawnPlayer();
     door.randomPlaceDoor();
     coins.randomPlaceCoins();

@@ -1,7 +1,4 @@
 #include "./ui.h"
-#include <iostream>
-#include <locale.h>
-#include <ncursesw/ncurses.h>
 
 GameUI::GameUI(Dungeon& _dungeon, Player& _player) : dungeon(_dungeon), player(_player) {}
 
@@ -19,6 +16,7 @@ void GameUI::initUI() {
     init_pair(1, COLOR_GREEN, COLOR_BLACK); 
     init_pair(2, COLOR_YELLOW, COLOR_BLACK); 
     init_pair(3, COLOR_BLUE, COLOR_BLACK); 
+    init_pair(4, COLOR_RED, COLOR_BLACK); 
 
     int screenHeight, screenWidth;
     getmaxyx(stdscr, screenHeight, screenWidth);
@@ -49,6 +47,9 @@ void GameUI::drawDungeon() {
             else if (tile == 'D') {
                 wattron(gameWin, COLOR_PAIR(3));
             }
+            else if (tile == 'K') {
+                wattron(gameWin, COLOR_PAIR(4));
+            }
 
             //Draw tile
             mvwaddch(gameWin, y + 1, x + 1, dungeon.map[y][x]);
@@ -57,6 +58,7 @@ void GameUI::drawDungeon() {
             wattroff(gameWin, COLOR_PAIR(1));
             wattroff(gameWin, COLOR_PAIR(2));
             wattroff(gameWin, COLOR_PAIR(3));
+            wattroff(gameWin, COLOR_PAIR(4));
         }
     }
     wrefresh(gameWin);
@@ -67,7 +69,7 @@ void GameUI::drawPlayerStatus() {
 
     mvwprintw(uiWin, y++, 2, "Floor: %d", player.playerFloor);
     mvwprintw(uiWin, y++, 2, "Player:");
-    mvwprintw(uiWin, y++, 4, "Level: %d", 5);
+    mvwprintw(uiWin, y++, 4, "Level: %d", player.level);
     mvwprintw(uiWin, y++, 4, "HP: %d/%d", (int)player.getCurrentHealth(), (int)player.maxHealth);
     mvwprintw(uiWin, y++, 4, "Coins: %d", player.playerCoin);
     mvwprintw(uiWin, y++, 2, "Inventory:");
@@ -99,6 +101,32 @@ void GameUI::drawPlayerControl(int startY) {
     mvwprintw(uiWin, startY, 2, "<-------Control------->");
     mvwprintw(uiWin, startY + 1, 2, "W A S D to walk.");
     mvwprintw(uiWin, startY + 2, 2, "q to exit");
+}
+
+void GameUI::drawDeathScreen() {
+    clear();
+    
+    int artHeight = sizeof(SKULL) / sizeof(SKULL[0]);
+    int artWidth = strlen(SKULL[0]); 
+
+    int y = (LINES - artHeight) / 2;
+    int x = (COLS - artWidth) / 2;
+    
+    for (int i = 0; SKULL[i] != nullptr; ++i) {
+        mvprintw(y + i, x, "%s", SKULL[i]);
+    }
+
+    std::string message = ">>> YOU DIED <<<";
+    int messageLength = message.length();
+    int messageX = (COLS - messageLength) / 2; 
+
+    std::string message2 = "---Press R to restart---";
+    int messageLength2 = message2.length();
+    int messageX2 = (COLS - messageLength2) / 2; 
+
+    mvprintw(y + 9, messageX, "%s", message.c_str());
+    mvprintw(y + 10, messageX, "%s", message2.c_str());
+    refresh();
 }
 
 void GameUI::updateUI() {

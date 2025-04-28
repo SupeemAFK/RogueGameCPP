@@ -33,35 +33,41 @@ int main() {
         }
         //Restart
         else if (ch == 'r' || ch == 'R') {
+            if (player.die) player.die = false;
             gameManager.restartGame();
         }
-        else if (ch == 'w' || ch == 'W') {
+        else if ((ch == 'w' || ch == 'W') && !player.die) {
             player.movePlayer({ 0, -1 });
             for (auto& enemy : gameManager.enemies) {
                 enemy.randomMoveMonster();
             }
         }
-        else if (ch == 's' || ch == 'S') {
+        else if ((ch == 's' || ch == 'S') && !player.die) {
             player.movePlayer({ 0, 1 });
             for (auto& enemy : gameManager.enemies) {
                 enemy.randomMoveMonster();
             }
         }
-        else if (ch == 'a' || ch == 'A') {
+        else if ((ch == 'a' || ch == 'A') && !player.die) {
             player.movePlayer({ -1, 0 });
             for (auto& enemy : gameManager.enemies) {
                 enemy.randomMoveMonster();
             }
         }
-        else if (ch == 'd' || ch == 'D') {
+        else if ((ch == 'd' || ch == 'D') && !player.die) {
             player.movePlayer({ 1, 0 });
             for (auto& enemy : gameManager.enemies) {
                 enemy.randomMoveMonster();
             }
         }
 
-        ui.updateGameScreen(); //Always update game screen
-        ui.updateUI(); //Always update UI
+        if (player.die) {
+            ui.drawDeathScreen();
+        }
+        else {
+            ui.updateGameScreen(); //Always update game screen
+            ui.updateUI(); //Always update UI
+        }
     }
 
     //End ncurses
