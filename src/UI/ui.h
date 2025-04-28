@@ -15,12 +15,14 @@ class GameUI {
         GameUI(Dungeon& _dungeon, Player& _player);
 
         void initUI();
+        void updateUI();
+        void updateGameScreen();
+
+    private:
         void drawDungeon();
         void drawPlayerStatus();
         void drawDialogue(int startY);
         void drawPlayerControl(int startY);
-        void updateUI();
-        void updateGameScreen();
 };
 
 #endif

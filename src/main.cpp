@@ -21,7 +21,7 @@ int main() {
     nextLevelDoor.randomPlaceDoor();
     coin.randomPlaceCoins();
     ui.initUI();
-    ui.drawDungeon();
+    ui.updateGameScreen();
     ui.updateUI();
 
     //Update
