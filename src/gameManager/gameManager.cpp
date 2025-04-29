@@ -18,6 +18,7 @@ void GameManager::startGame() {
 
 void GameManager::restartGame() {
     dungeon.generateDungeon();
+    enemies.clear();
     player.clearPlayer();
     player.resetPlayer();
     player.randomSpawnPlayer();

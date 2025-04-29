@@ -6,8 +6,15 @@ HashTable<KeyType, ValueType>::HashTable() {}
 
 template <typename KeyType, typename ValueType>
 int HashTable<KeyType, ValueType>::hashFunction(const KeyType& key) const {
+    string keyStr;
+
+    if constexpr (is_same<KeyType, string>::value) {
+        keyStr = key;
+    } else {
+        keyStr = to_string(key);
+    }
+
     int hash = 0;
-    string keyStr = to_string(key);
     for (char c : keyStr) {
         hash = (hash * 31 + c) % tableSize;
     }
@@ -72,3 +79,4 @@ void HashTable<KeyType, ValueType>::clearAll() {
     }
 }
 
+template class HashTable<std::string, int>;
