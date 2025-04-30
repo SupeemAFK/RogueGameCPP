@@ -1,14 +1,15 @@
 #ifndef NEXTLEVEL_H
 #define NEXTLEVEL_H
 
-#include "../dungeon/dungeon.h"
+class Dungeon;
 
 class NextLevel {
     public:
-        Dungeon& dungeon;
-        NextLevel(Dungeon& _dungeon);
+        NextLevel(Dungeon* _dungeon);
         
         void randomPlaceDoor();
+    private:
+        Dungeon* dungeon;
 };
 
 #endif

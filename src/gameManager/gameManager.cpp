@@ -1,15 +1,25 @@
 #include "./gameManager.h"
 #include <cstdlib>
+#include <algorithm>
 
-GameManager::GameManager(Dungeon& _dungeon, Coin& _coin, NextLevel& _door, Player& _player) : 
-    dungeon(_dungeon),
-    coins(_coin),
-    door(_door),
-    player(_player)
+GameManager::GameManager() : 
+    dungeon(),
+    coins(&dungeon),
+    door(&dungeon),
+    player(&dungeon, this, 100)
 {}
 
 void GameManager::startGame() {
     dungeon.generateDungeon();
+    player.randomSpawnPlayer();
+    door.randomPlaceDoor();
+    coins.randomPlaceCoins();
+    randomEnemiesPlacement();
+}
+
+void GameManager::goToNextFloor() {
+    dungeon.generateDungeon();
+    enemies.clear();
     player.randomSpawnPlayer();
     door.randomPlaceDoor();
     coins.randomPlaceCoins();
@@ -38,13 +48,21 @@ void GameManager::randomEnemiesPlacement() {
             int randomY = room.y + (rand() % room.height);
             if (dungeon.map[randomY][randomX] != '-' && dungeon.map[randomY][randomX] != '|') {
                 if (dungeon.map[randomY][randomX] == '.') {
-                    Enemy enemy(player, dungeon, 100, randomX, randomY);
-                    enemy.previousTile = dungeon.map[randomY][randomX];
-                    dungeon.map[randomY][randomX] = enemy.monsterRender;
+                    Enemy* enemy = new Enemy(&player, &dungeon, this, 100, randomX, randomY);
+                    enemy->previousTile = dungeon.map[randomY][randomX];
+                    dungeon.map[randomY][randomX] = enemy->monsterRender;
                     enemies.push_back(move(enemy));
                 }
             }
         }
+    }
+}
+
+void GameManager ::removeEnemy(Enemy* enemy) {
+    auto it = find(enemies.begin(), enemies.end(), enemy);
+    if (it != enemies.end()) {
+        enemies.erase(it);
+        delete enemy; //free memory
     }
 }
 

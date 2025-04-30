@@ -12,16 +12,18 @@ using namespace std;
 
 class GameManager {
     public:
-        vector<Enemy> enemies;        
-        Dungeon& dungeon;
-        Coin& coins;
-        NextLevel& door;
-        Player& player;
-        GameManager(Dungeon& _dungeon, Coin& _coins, NextLevel& door, Player& _player);
+        vector<Enemy*> enemies;        
+        Dungeon dungeon;
+        Coin coins;
+        NextLevel door;
+        Player player;
+        GameManager();
 
         void startGame();
+        void goToNextFloor();
         void restartGame();
         void randomEnemiesPlacement();
+        void removeEnemy(Enemy* enemy);
 };
 
 #endif

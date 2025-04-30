@@ -1,9 +1,13 @@
 #include "./enemy.h"
+#include "../player/player.h"
+#include "../dungeon/dungeon.h"
+#include "../gameManager/gameManager.h"
 #include <random>
 
-Enemy::Enemy(Player& _player, Dungeon& _dungeon, float maxHealth, int _enemyX, int _enemyY) : 
+Enemy::Enemy(Player* _player, Dungeon* _dungeon, GameManager* _gm, float maxHealth, int _enemyX, int _enemyY) : 
     player(_player), 
     dungeon(_dungeon), 
+    gm(_gm),
     health(maxHealth),
     monsterX(_enemyX),
     monsterY(_enemyY)
@@ -26,13 +30,13 @@ void Enemy::randomMoveMonster() {
     }
 
     //Check overbound
-    if (newPositionY < 0 || newPositionY >= dungeon.map.size() ||
-        newPositionX < 0 || newPositionX >= dungeon.map[0].size()) {
+    if (newPositionY < 0 || newPositionY >= dungeon->map.size() ||
+        newPositionX < 0 || newPositionX >= dungeon->map[0].size()) {
         return; 
     }
 
     //Check instances
-    char nextTile = dungeon.map[newPositionY][newPositionX];
+    char nextTile = dungeon->map[newPositionY][newPositionX];
     if (nextTile == '|' || 
         nextTile == '-' || 
         nextTile == ' ' || 
@@ -44,16 +48,16 @@ void Enemy::randomMoveMonster() {
         return; 
     }
 
-    dungeon.map[monsterY][monsterX] = previousTile; 
+    dungeon->map[monsterY][monsterX] = previousTile; 
     monsterX = newPositionX;
     monsterY = newPositionY;
-    previousTile = dungeon.map[monsterY][monsterX];
-    dungeon.map[monsterY][monsterX] = monsterRender; 
+    previousTile = dungeon->map[monsterY][monsterX];
+    dungeon->map[monsterY][monsterX] = monsterRender; 
 }
 
 void Enemy::moveToPlayer() {
-    int dx = player.playerX - monsterX;
-    int dy = player.playerY - monsterY;
+    int dx = player->playerX - monsterX;
+    int dy = player->playerY - monsterY;
 
     int newPositionX;
     int newPositionY;
@@ -67,29 +71,30 @@ void Enemy::moveToPlayer() {
         else if (dy < 0) newPositionY = monsterY - 1;
     }
 
-    dungeon.map[monsterY][monsterX] = previousTile; 
+    dungeon->map[monsterY][monsterX] = previousTile; 
     monsterX = newPositionX;
     monsterY = newPositionY;
-    previousTile = dungeon.map[monsterY][monsterX];
-    dungeon.map[monsterY][monsterX] = monsterRender; 
+    previousTile = dungeon->map[monsterY][monsterX];
+    dungeon->map[monsterY][monsterX] = monsterRender; 
 }
 
 void Enemy::checkNextToPlayer() {
-    if ((monsterY > 0 && dungeon.map[monsterY - 1][monsterX] == '@') || // up
-    (monsterY + 1 < dungeon.map.size() && dungeon.map[monsterY + 1][monsterX] == '@') || // down
-    (monsterX > 0 && dungeon.map[monsterY][monsterX - 1] == '@') || // left
-    (monsterX + 1 < dungeon.map[0].size() && dungeon.map[monsterY][monsterX + 1] == '@')) // right
+    if ((monsterY > 0 && dungeon->map[monsterY - 1][monsterX] == '@') || // up
+    (monsterY + 1 < dungeon->map.size() && dungeon->map[monsterY + 1][monsterX] == '@') || // down
+    (monsterX > 0 && dungeon->map[monsterY][monsterX - 1] == '@') || // left
+    (monsterX + 1 < dungeon->map[0].size() && dungeon->map[monsterY][monsterX + 1] == '@')) // right
     {
         //Attack player miss, chance etc..
-        player.damaged(damage);
+        player->damaged(damage);
     }
 }
 
 void Enemy::damaged(float damage) {
     health -= damage;
+    if (health <= 0) die();
 }
 
 void Enemy::die() {
-    dungeon.map[monsterX][monsterY] = '.';
-    delete this;
+    dungeon->map[monsterY][monsterX] = '.';
+    gm->removeEnemy(this);
 }

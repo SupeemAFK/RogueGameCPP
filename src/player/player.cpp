@@ -1,9 +1,11 @@
 #include <vector>
 #include "./player.h"
+#include "../dungeon/dungeon.h"
+#include "../gameManager/gameManager.h"
 
 using namespace std;
 
-Player::Player(Dungeon& _dungeon, Coin& _coin, NextLevel& _door, float _maxHealth) :
+Player::Player(Dungeon* _dungeon, GameManager* _gm, float _maxHealth) :
     playerX(0), 
     playerY(0), 
     level(1),
@@ -13,25 +15,24 @@ Player::Player(Dungeon& _dungeon, Coin& _coin, NextLevel& _door, float _maxHealt
     maxHealth(_maxHealth),
     health(_maxHealth),
     dungeon(_dungeon), 
-    coin(_coin), 
-    door(_door)
+    gm(_gm)
 {}
 
 void Player::clearPlayer() {
-    dungeon.map[playerY][playerX] = '.';
+    dungeon->map[playerY][playerX] = '.';
 }
 
 void Player::randomSpawnPlayer() {
-    if (dungeon.rooms.empty()) return;
+    if (dungeon->rooms.empty()) return;
 
-    int randomRoomIndex = rand() % dungeon.rooms.size();
-    const Room& room = dungeon.rooms[randomRoomIndex];
+    int randomRoomIndex = rand() % dungeon->rooms.size();
+    const Room& room = dungeon->rooms[randomRoomIndex];
 
     playerY = room.centerY();
     playerX = room.centerX();
 
-    previousTile = dungeon.map[playerY][playerX];
-    dungeon.map[playerY][playerX] = '@';
+    previousTile = dungeon->map[playerY][playerX];
+    dungeon->map[playerY][playerX] = '@';
 }
 
 void::Player::movePlayer(vector<int> direction) {
@@ -39,35 +40,35 @@ void::Player::movePlayer(vector<int> direction) {
     int newPositionY = playerY + direction[1];
 
     //Check if walls
-    if (dungeon.map[newPositionY][newPositionX] == '|' || dungeon.map[newPositionY][newPositionX] == '-' || dungeon.map[newPositionY][newPositionX] == ' ') {
+    if (dungeon->map[newPositionY][newPositionX] == '|' || dungeon->map[newPositionY][newPositionX] == '-' || dungeon->map[newPositionY][newPositionX] == ' ') {
         return;
     }
     //Check if coin
-    else if (dungeon.map[newPositionY][newPositionX] == '$') {
+    else if (dungeon->map[newPositionY][newPositionX] == '$') {
         playerCoin++;
-        dungeon.map[newPositionY][newPositionX] = '.';
+        dungeon->map[newPositionY][newPositionX] = '.';
     }
     //Check if door
-    else if (dungeon.map[newPositionY][newPositionX] == 'D') {
-        dungeon.generateDungeon();
-        clearPlayer();
-        randomSpawnPlayer();
-        door.randomPlaceDoor();
-        coin.randomPlaceCoins();
+    else if (dungeon->map[newPositionY][newPositionX] == 'D') {
+        gm->goToNextFloor();
         playerFloor++;
         return;
     }
     //Check if enemy
-    else if (dungeon.map[newPositionY][newPositionX] == 'K') {
-        //Attack enemy miss, chance etc..
-        return;
+    for (auto& enemy : gm->enemies) {
+        if (enemy->monsterX == newPositionX && enemy->monsterY == newPositionY) {
+            //Attack enemy miss, chance etc..
+            enemy->damaged(50);
+            return;
+        }
     }
 
-    dungeon.map[playerY][playerX] = previousTile;
+
+    dungeon->map[playerY][playerX] = previousTile;
     playerX = newPositionX;
     playerY = newPositionY;
-    previousTile = dungeon.map[playerY][playerX];
-    dungeon.map[playerY][playerX] = '@';
+    previousTile = dungeon->map[playerY][playerX];
+    dungeon->map[playerY][playerX] = '@';
 }
 
 void Player::damaged(float damage) {

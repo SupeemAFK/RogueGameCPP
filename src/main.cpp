@@ -12,12 +12,8 @@ int main() {
     srand(time(0));
 
     //Start
-    Dungeon dungeon;
-    Coin coin(dungeon);
-    NextLevel nextLevelDoor(dungeon);
-    Player player(dungeon, coin, nextLevelDoor, 100);
-    GameManager gameManager(dungeon, coin, nextLevelDoor, player);
-    GameUI ui(dungeon, player);
+    GameManager gameManager;
+    GameUI ui(&gameManager.dungeon, &gameManager.player);
 
     gameManager.startGame();
     ui.initUI();
@@ -33,39 +29,39 @@ int main() {
         }
         //Restart
         else if (ch == 'r' || ch == 'R') {
-            if (player.die) player.die = false;
+            if (gameManager.player.die) gameManager.player.die = false;
             gameManager.restartGame();
         }
-        else if ((ch == 'w' || ch == 'W') && !player.die) {
-            player.movePlayer({ 0, -1 });
+        else if ((ch == 'w' || ch == 'W') && !gameManager.player.die) {
+            gameManager.player.movePlayer({ 0, -1 });
             for (auto& enemy : gameManager.enemies) {
-                enemy.randomMoveMonster();
-                enemy.checkNextToPlayer();
+                enemy->randomMoveMonster();
+                enemy->checkNextToPlayer();
             }
         }
-        else if ((ch == 's' || ch == 'S') && !player.die) {
-            player.movePlayer({ 0, 1 });
+        else if ((ch == 's' || ch == 'S') && !gameManager.player.die) {
+            gameManager.player.movePlayer({ 0, 1 });
             for (auto& enemy : gameManager.enemies) {
-                enemy.randomMoveMonster();
-                enemy.checkNextToPlayer();
+                enemy->randomMoveMonster();
+                enemy->checkNextToPlayer();
             }
         }
-        else if ((ch == 'a' || ch == 'A') && !player.die) {
-            player.movePlayer({ -1, 0 });
+        else if ((ch == 'a' || ch == 'A') && !gameManager.player.die) {
+            gameManager.player.movePlayer({ -1, 0 });
             for (auto& enemy : gameManager.enemies) {
-                enemy.randomMoveMonster();
-                enemy.checkNextToPlayer();
+                enemy->randomMoveMonster();
+                enemy->checkNextToPlayer();
             }
         }
-        else if ((ch == 'd' || ch == 'D') && !player.die) {
-            player.movePlayer({ 1, 0 });
+        else if ((ch == 'd' || ch == 'D') && !gameManager.player.die) {
+            gameManager.player.movePlayer({ 1, 0 });
             for (auto& enemy : gameManager.enemies) {
-                enemy.randomMoveMonster();
-                enemy.checkNextToPlayer();
+                enemy->randomMoveMonster();
+                enemy->checkNextToPlayer();
             }
         }
 
-        if (player.die) {
+        if (gameManager.player.die) {
             ui.drawDeathScreen();
         }
         else {

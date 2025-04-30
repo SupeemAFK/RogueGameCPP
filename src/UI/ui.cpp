@@ -1,6 +1,8 @@
 #include "./ui.h"
+#include "../dungeon/dungeon.h"
+#include "../player/player.h"
 
-GameUI::GameUI(Dungeon& _dungeon, Player& _player) : dungeon(_dungeon), player(_player) {}
+GameUI::GameUI(Dungeon* _dungeon, Player* _player) : dungeon(_dungeon), player(_player) {}
 
 void GameUI::initUI() {
     setlocale(LC_ALL, "en_US.UTF-8");
@@ -21,7 +23,7 @@ void GameUI::initUI() {
     int screenHeight, screenWidth;
     getmaxyx(stdscr, screenHeight, screenWidth);
 
-    int gameWidth = dungeon.MAP_WIDTH;
+    int gameWidth = dungeon->MAP_WIDTH;
     int uiWidth = screenWidth - gameWidth;
 
     gameWin = newwin(screenHeight, gameWidth, 0, 0);
@@ -35,9 +37,9 @@ void GameUI::initUI() {
 }
 
 void GameUI::drawDungeon() {
-    for (size_t y = 0; y < dungeon.map.size(); ++y) {
-        for (size_t x = 0; x < dungeon.map[y].size(); ++x) {
-            char tile = dungeon.map[y][x];
+    for (size_t y = 0; y < dungeon->map.size(); ++y) {
+        for (size_t x = 0; x < dungeon->map[y].size(); ++x) {
+            char tile = dungeon->map[y][x];
             if (tile == '@') {
                 wattron(gameWin, COLOR_PAIR(1));
             }
@@ -52,7 +54,7 @@ void GameUI::drawDungeon() {
             }
 
             //Draw tile
-            mvwaddch(gameWin, y + 1, x + 1, dungeon.map[y][x]);
+            mvwaddch(gameWin, y + 1, x + 1, dungeon->map[y][x]);
 
             //Turn off color
             wattroff(gameWin, COLOR_PAIR(1));
@@ -67,12 +69,12 @@ void GameUI::drawDungeon() {
 void GameUI::drawPlayerStatus() {
     int y = 1;
 
-    mvwprintw(uiWin, y++, 2, "Floor: %d", player.playerFloor);
+    mvwprintw(uiWin, y++, 2, "Floor: %d", player->playerFloor);
 
     mvwprintw(uiWin, y++, 2, "Player:");
-    mvwprintw(uiWin, y++, 4, "Level: %d", player.level);
-    mvwprintw(uiWin, y++, 4, "HP: %d/%d", (int)player.getCurrentHealth(), (int)player.maxHealth);
-    mvwprintw(uiWin, y++, 4, "Coins: %d", player.playerCoin);
+    mvwprintw(uiWin, y++, 4, "Level: %d", player->level);
+    mvwprintw(uiWin, y++, 4, "HP: %d/%d", (int)player->getCurrentHealth(), (int)player->maxHealth);
+    mvwprintw(uiWin, y++, 4, "Coins: %d", player->playerCoin);
     
     mvwprintw(uiWin, y++, 2, "Inventory:");
     mvwprintw(uiWin, y++, 4, "- %s x%d", "HealingPotion", 3);

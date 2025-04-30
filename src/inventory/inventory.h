@@ -5,9 +5,11 @@
 
 class Inventory {
     public:
-        HashTable<string, int> inventory;
         void addItemToInventory(string itemName);
         void discardItemFromInventory(string itemName);
+
+    private:
+        HashTable<string, int> inventory;
 };
 
 #endif

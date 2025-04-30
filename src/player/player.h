@@ -2,9 +2,9 @@
 #define PLAYER_H
 
 #include <vector>
-#include "../dungeon/dungeon.h"
-#include "../nextLevel/nextlevel.h"
-#include "../coin/coin.h"
+
+class Dungeon;
+class GameManager;
 
 class Player {
     public:
@@ -15,11 +15,7 @@ class Player {
         bool die = false;
         float maxHealth;
         
-        Dungeon& dungeon;
-        Coin& coin;
-        NextLevel& door;
-        
-        Player(Dungeon& _dungeon, Coin& _coin, NextLevel& _door, float _maxHealth);
+        Player(Dungeon* _dungeon, GameManager* _gm, float _maxHealth);
 
         void clearPlayer();
         void randomSpawnPlayer();
@@ -29,6 +25,9 @@ class Player {
         void resetPlayer();
 
     private:
+        Dungeon* dungeon;
+        GameManager* gm;
+
         char previousTile;
         float health;
 };

@@ -1,8 +1,9 @@
 #ifndef MONSTER_H
 #define MONSTER_H
 
-#include "../player/player.h"
-#include "../dungeon/dungeon.h"
+class Player;
+class Dungeon;
+class GameManager;
 
 class Enemy {
     public:
@@ -12,9 +13,7 @@ class Enemy {
         char previousTile = '.';
         char monsterRender = 'K';
         
-        Dungeon& dungeon;
-        Player& player;
-        Enemy(Player& _player, Dungeon& _dungeon, float maxHealth, int _enemyX, int _enemyY);
+        Enemy(Player* _player, Dungeon* _dungeon, GameManager* _gm, float maxHealth, int _enemyX, int _enemyY);
         
         void randomMoveMonster();
         void moveToPlayer();
@@ -23,6 +22,9 @@ class Enemy {
         void die();
 
     private:
+        GameManager* gm;
+        Dungeon* dungeon;
+        Player* player;
         float health;
 };
 
