@@ -80,4 +80,3 @@ void HashTable<KeyType, ValueType>::clearAll() {
 }
 
 template class HashTable<string, int>;
-template class HashTable<Item, int>;

@@ -6,5 +6,5 @@ HealingPotion::HealingPotion()
 {}
 
 void HealingPotion::use() {
-    gm->restartGame();
+    gm->player.healPlayer(15);
 }

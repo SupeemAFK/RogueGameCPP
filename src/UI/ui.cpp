@@ -84,10 +84,10 @@ void GameUI::drawPlayerStatus() {
     
     mvwprintw(uiWin, y++, 2, "Inventory:");
     for (int i = 0; i < inventory->getInventoryKeys().size(); ++i) {
-        const Item& item = inventory->getInventoryKeys()[i];
-        int* amount = inventory->getHashTable().search(item);
+        Item* item = inventory->getInventoryKeys()[i];
+        int* amount = inventory->getHashTable().search(item->getName());
         if (amount) {
-            mvwprintw(uiWin, y++, 4, "%d.) %s x%d", i + 1, item.getName().c_str(), *amount);
+            mvwprintw(uiWin, y++, 4, "%d.) %s x%d", i + 1, item->getName().c_str(), *amount);
         }
     }
 }

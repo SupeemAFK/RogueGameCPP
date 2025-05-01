@@ -2,8 +2,6 @@
 #define HASHTABLE_H
 
 #include <string>
-#include <functional>
-#include "../../Item/item.h"
 
 using namespace std;
 

@@ -22,6 +22,7 @@ void GameManager::startGame() {
 void GameManager::goToNextFloor() {
     dungeon.generateDungeon();
     enemies.clear();
+    items.clear();
     player.randomSpawnPlayer();
     door.randomPlaceDoor();
     coins.randomPlaceCoins();
@@ -32,6 +33,7 @@ void GameManager::goToNextFloor() {
 void GameManager::restartGame() {
     dungeon.generateDungeon();
     enemies.clear();
+    items.clear();
     inventory.clearInventory();
     player.clearPlayer();
     player.resetPlayer();
