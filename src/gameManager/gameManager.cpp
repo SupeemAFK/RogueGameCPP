@@ -56,7 +56,7 @@ void GameManager::randomEnemiesPlacement() {
                     Enemy* enemy = new Enemy(&player, &dungeon, this, 100, randomX, randomY);
                     enemy->previousTile = dungeon.map[randomY][randomX];
                     dungeon.map[randomY][randomX] = enemy->monsterRender;
-                    enemies.push_back(move(enemy));
+                    enemies.push_back(enemy);
                 }
             }
         }
@@ -85,8 +85,9 @@ void GameManager::randomItemsPlacement() {
                     HealingPotion* healingPotion = new HealingPotion();
                     healingPotion->setX(randomX);
                     healingPotion->setY(randomY);
+                    healingPotion->setGameManager(this);
                     dungeon.map[randomY][randomX] = healingPotion->getItemRender();
-                    items.push_back(move(healingPotion));
+                    items.push_back(healingPotion);
                 }
             }
         }

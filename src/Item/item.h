@@ -3,9 +3,13 @@
 
 #include <string>
 
+class GameManager;
+
 class Item {
     public:
         Item(); //Default constructor
+        void setGameManager(GameManager* _gm);
+
         friend std::ostream& operator<<(std::ostream& os, const Item& item) {
             os << item.name;
             return os;
@@ -21,12 +25,14 @@ class Item {
         virtual char getItemRender() const;
 
         virtual void use();
+        virtual ~Item() {}
 
         bool operator==(const Item& other) const;
         bool operator!=(const Item& other) const;
 
     protected:
         Item(const std::string& _name, const std::string& _desc, char _render);
+        GameManager* gm;
 
     private:
         int itemX;

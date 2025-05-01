@@ -1,4 +1,5 @@
 #include "./item.h"
+#include "../gameManager/gameManager.h"
 
 Item::Item(): 
     name(""), 
@@ -11,6 +12,10 @@ Item::Item(const std::string& _name, const std::string& _desc, char _render) :
     descriptions(_desc), 
     itemRender(_render) 
 {}
+
+void Item::setGameManager(GameManager* _gm) {
+    gm = _gm;
+}
 
 void Item::use() {
     //Base

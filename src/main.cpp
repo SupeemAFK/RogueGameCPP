@@ -60,6 +60,21 @@ int main() {
                 enemy->checkNextToPlayer();
             }
         }
+        else if (ch == '1' && !gameManager.player.die) {
+            gameManager.inventory.useItem(0);
+        }
+        else if (ch == '2' && !gameManager.player.die) {
+            gameManager.inventory.useItem(1);
+        }
+        else if (ch == '3' && !gameManager.player.die) {
+            gameManager.inventory.useItem(2);
+        }
+        else if (ch == '4' && !gameManager.player.die) {
+            gameManager.inventory.useItem(3);
+        }
+        else if (ch == '5' && !gameManager.player.die) {
+            gameManager.inventory.useItem(4);
+        }
 
         if (gameManager.player.die) {
             ui.drawDeathScreen();

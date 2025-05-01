@@ -24,7 +24,6 @@ private:
 public:
     HashTable();
 
-    void traverse(std::function<void(const KeyType&, const ValueType&)> func) const;    
     void insert(const KeyType& key, const ValueType& value);
     ValueType* search(const KeyType& key);
     void remove(const KeyType& key);

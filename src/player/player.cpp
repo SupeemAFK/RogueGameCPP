@@ -84,6 +84,15 @@ void Player::damaged(float damage) {
     if (health <= 0) die = true;
 }
 
+void Player::healPlayer(float amount) {
+    if (health + amount >= maxHealth) {
+        health = maxHealth;
+    }
+    else {
+        health += amount;
+    }
+}
+
 float Player::getCurrentHealth() {
     return health;
 }

@@ -83,9 +83,13 @@ void GameUI::drawPlayerStatus() {
     mvwprintw(uiWin, y++, 4, "Coins: %d", player->playerCoin);
     
     mvwprintw(uiWin, y++, 2, "Inventory:");
-    inventory->getHashTable().traverse([&](const Item& item, const int& quantity) {
-        mvwprintw(uiWin, y++, 4, "- %s x%d", item.getName().c_str(), quantity);
-    });
+    for (int i = 0; i < inventory->getInventoryKeys().size(); ++i) {
+        const Item& item = inventory->getInventoryKeys()[i];
+        int* amount = inventory->getHashTable().search(item);
+        if (amount) {
+            mvwprintw(uiWin, y++, 4, "%d.) %s x%d", i + 1, item.getName().c_str(), *amount);
+        }
+    }
 }
 
 void GameUI::drawDialogue(int startY) {

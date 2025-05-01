@@ -21,6 +21,7 @@ class Player {
         void randomSpawnPlayer();
         void movePlayer(std::vector<int> direction);
         void damaged(float damage);
+        void healPlayer(float amount);
         float getCurrentHealth();
         void resetPlayer();
 

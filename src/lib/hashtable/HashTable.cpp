@@ -5,15 +5,6 @@ template <typename KeyType, typename ValueType>
 HashTable<KeyType, ValueType>::HashTable() {}
 
 template <typename KeyType, typename ValueType>
-void HashTable<KeyType, ValueType>::traverse(std::function<void(const KeyType&, const ValueType&)> func) const {
-    for (int i = 0; i < tableSize; ++i) {
-        if (table[i].occupied) {
-            func(table[i].key, table[i].value);
-        }
-    }
-}
-
-template <typename KeyType, typename ValueType>
 int HashTable<KeyType, ValueType>::hashFunction(const KeyType& key) const {
     string keyStr;
 
