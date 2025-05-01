@@ -6,6 +6,7 @@
 #include "../nextLevel/nextLevel.h"
 #include "../player/player.h"
 #include "../enemy/enemy.h"
+#include "../inventory/inventory.h"
 #include <vector>
 
 using namespace std;
@@ -17,6 +18,7 @@ class GameManager {
         Coin coins;
         NextLevel door;
         Player player;
+        Inventory inventory;
         GameManager();
 
         void startGame();

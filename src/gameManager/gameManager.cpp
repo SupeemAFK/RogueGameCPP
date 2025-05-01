@@ -6,7 +6,8 @@ GameManager::GameManager() :
     dungeon(),
     coins(&dungeon),
     door(&dungeon),
-    player(&dungeon, this, 100)
+    player(&dungeon, this, 100),
+    inventory()
 {}
 
 void GameManager::startGame() {
