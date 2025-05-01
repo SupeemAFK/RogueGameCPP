@@ -10,13 +10,14 @@
 
 class Dungeon;
 class Player;
+class Inventory;
 
 class GameUI {
     public:
         WINDOW* gameWin;
         WINDOW* uiWin;
 
-        GameUI(Dungeon* _dungeon, Player* _player);
+        GameUI(Dungeon* _dungeon, Player* _player, Inventory* _inventory);
 
         void initUI();
         void updateUI();
@@ -26,6 +27,7 @@ class GameUI {
     private:
         Dungeon* dungeon;
         Player* player;
+        Inventory* inventory;
 
         void drawDungeon();
         void drawPlayerStatus();

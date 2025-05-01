@@ -16,6 +16,7 @@ void GameManager::startGame() {
     door.randomPlaceDoor();
     coins.randomPlaceCoins();
     randomEnemiesPlacement();
+    randomItemsPlacement();
 }
 
 void GameManager::goToNextFloor() {
@@ -25,17 +26,20 @@ void GameManager::goToNextFloor() {
     door.randomPlaceDoor();
     coins.randomPlaceCoins();
     randomEnemiesPlacement();
+    randomItemsPlacement();
 }
 
 void GameManager::restartGame() {
     dungeon.generateDungeon();
     enemies.clear();
+    inventory.clearInventory();
     player.clearPlayer();
     player.resetPlayer();
     player.randomSpawnPlayer();
     door.randomPlaceDoor();
     coins.randomPlaceCoins();
     randomEnemiesPlacement();
+    randomItemsPlacement();
 }
 
 void GameManager::randomEnemiesPlacement() {
@@ -59,11 +63,41 @@ void GameManager::randomEnemiesPlacement() {
     }
 }
 
-void GameManager ::removeEnemy(Enemy* enemy) {
+void GameManager::removeEnemy(Enemy* enemy) {
     auto it = find(enemies.begin(), enemies.end(), enemy);
     if (it != enemies.end()) {
         enemies.erase(it);
         delete enemy; //free memory
+    }
+}
+
+void GameManager::randomItemsPlacement() {
+    if (dungeon.rooms.empty()) return;
+
+    for (const auto& room : dungeon.rooms) {
+        int isPlaced = rand() % 2;
+        if (!isPlaced) continue; //Skip this room
+        if (isPlaced) {
+            int randomX = room.x + (rand() % room.width);
+            int randomY = room.y + (rand() % room.height);
+            if (dungeon.map[randomY][randomX] != '-' && dungeon.map[randomY][randomX] != '|') {
+                if (dungeon.map[randomY][randomX] == '.') {
+                    HealingPotion* healingPotion = new HealingPotion();
+                    healingPotion->setX(randomX);
+                    healingPotion->setY(randomY);
+                    dungeon.map[randomY][randomX] = healingPotion->getItemRender();
+                    items.push_back(move(healingPotion));
+                }
+            }
+        }
+    }
+}
+
+void GameManager::removeItem(Item* item){
+    auto it = find(items.begin(), items.end(), item);
+    if (it != items.end()) {
+        items.erase(it);
+        delete item; //free memory
     }
 }
 

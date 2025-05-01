@@ -2,14 +2,17 @@
 #define INVENTORY_H
 
 #include "../lib/hashtable/HashTable.h"
+#include "../Item/item.h"
 
 class Inventory {
     public:
-        void addItemToInventory(string itemName);
-        void discardItemFromInventory(string itemName);
+        void addItemToInventory(Item itemName);
+        void discardItemFromInventory(Item itemName);
+        void clearInventory();
+        HashTable<Item, int> getHashTable();
 
     private:
-        HashTable<string, int> inventory;
+        HashTable<Item, int> inventoryTable;
 };
 
 #endif

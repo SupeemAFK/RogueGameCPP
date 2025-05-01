@@ -1,18 +1,26 @@
 #include "./inventory.h"
 
-void Inventory::addItemToInventory(string itemName) {
-    int* amount = inventory.search(itemName);
+void Inventory::addItemToInventory(Item item) {
+    int* amount = inventoryTable.search(item);
     if (amount != nullptr) {
         (*amount)++;
     }
     else {
-        inventory.insert(itemName, 1);
+        inventoryTable.insert(item, 1);
     }
 }
 
-void Inventory::discardItemFromInventory(string itemName) {
-    int* amount = inventory.search(itemName);
+void Inventory::discardItemFromInventory(Item item) {
+    int* amount = inventoryTable.search(item);
     if (amount != nullptr) {
-        inventory.remove(itemName);
+        inventoryTable.remove(item);
     }
+}
+
+void Inventory::clearInventory() {
+    inventoryTable.clearAll();
+}
+
+HashTable<Item, int> Inventory::getHashTable() {
+    return inventoryTable;
 }

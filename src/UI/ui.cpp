@@ -1,8 +1,9 @@
 #include "./ui.h"
 #include "../dungeon/dungeon.h"
 #include "../player/player.h"
+#include "../inventory/inventory.h"
 
-GameUI::GameUI(Dungeon* _dungeon, Player* _player) : dungeon(_dungeon), player(_player) {}
+GameUI::GameUI(Dungeon* _dungeon, Player* _player, Inventory* _inventory) : dungeon(_dungeon), player(_player), inventory(_inventory) {}
 
 void GameUI::initUI() {
     setlocale(LC_ALL, "en_US.UTF-8");
@@ -15,10 +16,11 @@ void GameUI::initUI() {
     refresh();
 
     //Init color
-    init_pair(1, COLOR_GREEN, COLOR_BLACK); 
+    init_pair(1, COLOR_CYAN, COLOR_BLACK); 
     init_pair(2, COLOR_YELLOW, COLOR_BLACK); 
     init_pair(3, COLOR_BLUE, COLOR_BLACK); 
     init_pair(4, COLOR_RED, COLOR_BLACK); 
+    init_pair(5, COLOR_GREEN, COLOR_BLACK); 
 
     int screenHeight, screenWidth;
     getmaxyx(stdscr, screenHeight, screenWidth);
@@ -52,6 +54,9 @@ void GameUI::drawDungeon() {
             else if (tile == 'K') {
                 wattron(gameWin, COLOR_PAIR(4));
             }
+            else if (tile == 'o') {
+                wattron(gameWin, COLOR_PAIR(5));
+            }
 
             //Draw tile
             mvwaddch(gameWin, y + 1, x + 1, dungeon->map[y][x]);
@@ -61,6 +66,7 @@ void GameUI::drawDungeon() {
             wattroff(gameWin, COLOR_PAIR(2));
             wattroff(gameWin, COLOR_PAIR(3));
             wattroff(gameWin, COLOR_PAIR(4));
+            wattroff(gameWin, COLOR_PAIR(5));
         }
     }
     wrefresh(gameWin);
@@ -77,8 +83,9 @@ void GameUI::drawPlayerStatus() {
     mvwprintw(uiWin, y++, 4, "Coins: %d", player->playerCoin);
     
     mvwprintw(uiWin, y++, 2, "Inventory:");
-    mvwprintw(uiWin, y++, 4, "- %s x%d", "HealingPotion", 3);
-    mvwprintw(uiWin, y++, 4, "- %s x%d", "Bomb", 1);
+    inventory->getHashTable().traverse([&](const Item& item, const int& quantity) {
+        mvwprintw(uiWin, y++, 4, "- %s x%d", item.getName().c_str(), quantity);
+    });
 }
 
 void GameUI::drawDialogue(int startY) {

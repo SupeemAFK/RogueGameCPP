@@ -13,7 +13,7 @@ int main() {
 
     //Start
     GameManager gameManager;
-    GameUI ui(&gameManager.dungeon, &gameManager.player);
+    GameUI ui(&gameManager.dungeon, &gameManager.player, &gameManager.inventory);
 
     gameManager.startGame();
     ui.initUI();

@@ -7,13 +7,16 @@
 #include "../player/player.h"
 #include "../enemy/enemy.h"
 #include "../inventory/inventory.h"
+#include "../Item/item.h"
+#include "../Item/healingPotion/healingPotion.h"
 #include <vector>
 
 using namespace std;
 
 class GameManager {
     public:
-        vector<Enemy*> enemies;        
+        vector<Enemy*> enemies;   
+        vector<Item* > items;     
         Dungeon dungeon;
         Coin coins;
         NextLevel door;
@@ -26,6 +29,8 @@ class GameManager {
         void restartGame();
         void randomEnemiesPlacement();
         void removeEnemy(Enemy* enemy);
+        void randomItemsPlacement();
+        void removeItem(Item* item);
 };
 
 #endif

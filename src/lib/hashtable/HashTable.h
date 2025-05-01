@@ -2,6 +2,8 @@
 #define HASHTABLE_H
 
 #include <string>
+#include <functional>
+#include "../../Item/item.h"
 
 using namespace std;
 
@@ -14,7 +16,7 @@ private:
         bool occupied = false;
     };
 
-    static const int tableSize = 10;
+    static const int tableSize = 5;
     Entry table[tableSize];
 
     int hashFunction(const KeyType& key) const;
@@ -22,6 +24,7 @@ private:
 public:
     HashTable();
 
+    void traverse(std::function<void(const KeyType&, const ValueType&)> func) const;    
     void insert(const KeyType& key, const ValueType& value);
     ValueType* search(const KeyType& key);
     void remove(const KeyType& key);
