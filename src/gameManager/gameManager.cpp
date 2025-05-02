@@ -47,7 +47,7 @@ void GameManager::restartGame() {
         delete enemy;
     }
     enemies.clear();
-    
+
     for (auto item : items) {
         delete item;
     }
@@ -96,12 +96,14 @@ void GameManager::randomItemsPlacement() {
     if (dungeon.rooms.empty()) return;
 
     for (const auto& room : dungeon.rooms) {
+        //Potions
         HealingPotion* healingPotion = new HealingPotion();
-        placeItem(healingPotion, room, 0.75, false);
+        placeItem(healingPotion, room, 1, false);
 
         MegaPotion* megaPotion = new MegaPotion();
         placeItem(megaPotion, room, 0.25, false);
 
+        //Weapons
         SteelSword* steelSword = new SteelSword();
         placeItem(steelSword, room, 0.0125, true);
 
@@ -110,6 +112,12 @@ void GameManager::randomItemsPlacement() {
 
         Katana* katana = new Katana();
         placeItem(katana, room, 0.00625, true);
+
+        Axe* axe = new Axe();
+        placeItem(axe, room, 0.0125, true);
+
+        Hammer* hammer = new Hammer();
+        placeItem(hammer, room, 0.005, true);
     }
 }
 

@@ -1,13 +1,16 @@
 #include "./inventory.h"
 
-void Inventory::addItemToInventory(Item* item) {
+bool Inventory::addItemToInventory(Item* item) {
     int* amount = inventoryTable.search(item->getName());
     if (amount != nullptr) {
         (*amount)++;
+        return true;
     }
     else {
+        if (isFull()) return false;
         inventoryKeys.push_back(item);
         inventoryTable.insert(item->getName(), 1);
+        return true;
     }
 }
 
@@ -39,6 +42,10 @@ void Inventory::useItem(int index) {
     Item* item = inventoryKeys[index];
     item->use();
     decreaseItemAmount(item);
+}
+
+bool Inventory::isFull() {
+    return inventoryTable.isFull();
 }
 
 void Inventory::clearInventory() {

@@ -26,6 +26,7 @@ public:
     ValueType* search(const KeyType& key);
     void remove(const KeyType& key);
     void clearAll();
+    bool isFull();
 };
 
 #endif // HASHTABLE_H

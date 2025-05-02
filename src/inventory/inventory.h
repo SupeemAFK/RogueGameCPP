@@ -11,11 +11,12 @@ using namespace std;
 
 class Inventory {
     public:
-        void addItemToInventory(Item* itemName);
+        bool addItemToInventory(Item* itemName);
         void decreaseItemAmount(Item* itemName);
         void discardItemFromInventory(Item* itemName);
         void useItem(int index);
         void clearInventory();
+        bool isFull();
         vector<Item*> getInventoryKeys();
         HashTable<string, int> getHashTable();
 

@@ -79,4 +79,14 @@ void HashTable<KeyType, ValueType>::clearAll() {
     }
 }
 
+template <typename KeyType, typename ValueType>
+bool HashTable<KeyType, ValueType>::isFull() {
+    for (int i = 0; i < tableSize; ++i) {
+        if (!table[i].occupied) {
+            return false;
+        }
+    }
+    return true;
+}
+
 template class HashTable<string, int>;

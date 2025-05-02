@@ -13,6 +13,8 @@
 #include "../Item/weapon/SteelSword/steelSword.h"
 #include "../Item/weapon/Dagger/dagger.h"
 #include "../Item/weapon/Katana/katana.h"
+#include "../Item/weapon/Axe/axe.h"
+#include "../Item/weapon/Hammer/hammer.h"
 #include <vector>
 
 using namespace std;

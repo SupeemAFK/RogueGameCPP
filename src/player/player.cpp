@@ -66,8 +66,8 @@ void::Player::movePlayer(vector<int> direction) {
     //Check if item
     for (auto& item : gm->items) {
         if (item->getX() == newPositionX && item->getY() == newPositionY) {
-            gm->inventory.addItemToInventory(item);
-            dungeon->map[newPositionY][newPositionX] = '.';
+            bool success = gm->inventory.addItemToInventory(item);
+            if (success) dungeon->map[newPositionY][newPositionX] = '.';
         }
     }
 
