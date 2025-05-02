@@ -11,6 +11,7 @@ Player::Player(Dungeon* _dungeon, GameManager* _gm, float _maxHealth) :
     level(1),
     playerCoin(0), 
     playerFloor(1), 
+    playerWeapon(nullptr),
     previousTile('.'), 
     maxHealth(_maxHealth),
     health(_maxHealth),
@@ -101,4 +102,14 @@ void Player::resetPlayer() {
     playerCoin = 0;
     playerFloor = 1;
     level = 1;
+}
+
+Weapon* Player::getPlayerWeapon() {
+    return playerWeapon;
+}
+
+void Player::setPlayerWeapon(Weapon* weapon) {
+    if (playerWeapon == nullptr) {
+        playerWeapon = weapon;
+    }
 }

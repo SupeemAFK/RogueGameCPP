@@ -2,6 +2,7 @@
 #include "../dungeon/dungeon.h"
 #include "../player/player.h"
 #include "../inventory/inventory.h"
+#include "../Item/weapon/weapon.h"
 
 GameUI::GameUI(Dungeon* _dungeon, Player* _player, Inventory* _inventory) : dungeon(_dungeon), player(_player), inventory(_inventory) {}
 
@@ -81,6 +82,12 @@ void GameUI::drawPlayerStatus() {
     mvwprintw(uiWin, y++, 4, "Level: %d", player->level);
     mvwprintw(uiWin, y++, 4, "HP: %d/%d", (int)player->getCurrentHealth(), (int)player->maxHealth);
     mvwprintw(uiWin, y++, 4, "Coins: %d", player->playerCoin);
+
+    string weaponName = "Fist";
+    if (player->getPlayerWeapon() != nullptr) {
+        weaponName = player->getPlayerWeapon()->getName();
+    }
+    mvwprintw(uiWin, y++, 4, "Weapon: %s", weaponName.c_str());
     
     mvwprintw(uiWin, y++, 2, "Inventory:");
     for (int i = 0; i < inventory->getInventoryKeys().size(); ++i) {
@@ -149,8 +156,8 @@ void GameUI::updateUI() {
     box(uiWin, 0, 0);
 
     drawPlayerStatus();
-    drawDialogue(10);
-    drawPlayerControl(15);
+    drawDialogue(20);
+    drawPlayerControl(25);
 
     wrefresh(uiWin);
 }

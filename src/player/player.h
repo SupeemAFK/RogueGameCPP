@@ -5,6 +5,7 @@
 
 class Dungeon;
 class GameManager;
+class Weapon;
 
 class Player {
     public:
@@ -24,10 +25,13 @@ class Player {
         void healPlayer(float amount);
         float getCurrentHealth();
         void resetPlayer();
+        Weapon* getPlayerWeapon();
+        void setPlayerWeapon(Weapon* weapon);
 
     private:
         Dungeon* dungeon;
         GameManager* gm;
+        Weapon* playerWeapon;
 
         char previousTile;
         float health;

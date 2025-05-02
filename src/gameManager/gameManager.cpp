@@ -1,6 +1,7 @@
 #include "./gameManager.h"
 #include <cstdlib>
 #include <algorithm>
+#include <time.h>
 
 GameManager::GameManager() : 
     dungeon(),
@@ -21,8 +22,17 @@ void GameManager::startGame() {
 
 void GameManager::goToNextFloor() {
     dungeon.generateDungeon();
+
+    for (auto enemy : enemies) {
+        delete enemy;
+    }
     enemies.clear();
+
+    for (auto item : items) {
+        delete item;
+    }
     items.clear();
+
     player.randomSpawnPlayer();
     door.randomPlaceDoor();
     coins.randomPlaceCoins();
@@ -32,8 +42,17 @@ void GameManager::goToNextFloor() {
 
 void GameManager::restartGame() {
     dungeon.generateDungeon();
+
+    for (auto enemy : enemies) {
+        delete enemy;
+    }
     enemies.clear();
+    
+    for (auto item : items) {
+        delete item;
+    }
     items.clear();
+
     inventory.clearInventory();
     player.clearPlayer();
     player.resetPlayer();
@@ -77,22 +96,20 @@ void GameManager::randomItemsPlacement() {
     if (dungeon.rooms.empty()) return;
 
     for (const auto& room : dungeon.rooms) {
-        int isPlaced = rand() % 2;
-        if (!isPlaced) continue; //Skip this room
-        if (isPlaced) {
-            int randomX = room.x + (rand() % room.width);
-            int randomY = room.y + (rand() % room.height);
-            if (dungeon.map[randomY][randomX] != '-' && dungeon.map[randomY][randomX] != '|') {
-                if (dungeon.map[randomY][randomX] == '.') {
-                    HealingPotion* healingPotion = new HealingPotion();
-                    healingPotion->setX(randomX);
-                    healingPotion->setY(randomY);
-                    healingPotion->setGameManager(this);
-                    dungeon.map[randomY][randomX] = healingPotion->getItemRender();
-                    items.push_back(healingPotion);
-                }
-            }
-        }
+        HealingPotion* healingPotion = new HealingPotion();
+        placeItem(healingPotion, room, 0.75, false);
+
+        MegaPotion* megaPotion = new MegaPotion();
+        placeItem(megaPotion, room, 0.25, false);
+
+        SteelSword* steelSword = new SteelSword();
+        placeItem(steelSword, room, 0.0125, true);
+
+        Dagger* dagger = new Dagger();
+        placeItem(dagger, room, 0.025, true);
+
+        Katana* katana = new Katana();
+        placeItem(katana, room, 0.00625, true);
     }
 }
 
@@ -104,4 +121,48 @@ void GameManager::removeItem(Item* item){
     }
 }
 
+bool GameManager::placeItem(Item* item, const Room& room, float spawnChancePercent, bool multiplyFloor) {
+    float multiplier = 1;
+    if (multiplyFloor) {
+        int tier = (player.playerFloor - 1) / 5;
+        multiplier = 1.0 + 0.25 * tier;
+    }
 
+    float effectiveChance = spawnChancePercent * multiplier * 100.0f;
+    if (effectiveChance > 100.0f) effectiveChance = 100.0f;
+
+    float roll = static_cast<float>(rand()) / RAND_MAX * 100;
+    if (roll >= effectiveChance) {
+        delete item;
+        return false;
+    }
+
+    const int maxAttempts = 10;
+    for (int attempt = 0; attempt < maxAttempts; ++attempt) {
+        int randomX = room.x + (rand() % room.width);
+        int randomY = room.y + (rand() % room.height);
+        char tile = dungeon.map[randomY][randomX];
+
+        if (tile == '-' || tile == '|' || tile == '+' || tile == 'D' || tile == '@') continue;
+
+        bool occupied = false;
+        for (auto& existingItem : items) {
+            if (existingItem->getX() == randomX && existingItem->getY() == randomY) {
+                occupied = true;
+                break;
+            }
+        }
+        if (occupied) continue;
+
+        item->setX(randomX);
+        item->setY(randomY);
+        item->setGameManager(this);
+        dungeon.map[randomY][randomX] = item->getItemRender();
+        items.push_back(item);
+        return true;
+    }
+
+    //return false when fail to find postion after many tries
+    delete item;
+    return false;
+}

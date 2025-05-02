@@ -9,6 +9,10 @@
 #include "../inventory/inventory.h"
 #include "../Item/item.h"
 #include "../Item/healingPotion/healingPotion.h"
+#include "../Item/megaPotion/megaPotion.h"
+#include "../Item/weapon/SteelSword/steelSword.h"
+#include "../Item/weapon/Dagger/dagger.h"
+#include "../Item/weapon/Katana/katana.h"
 #include <vector>
 
 using namespace std;
@@ -31,6 +35,9 @@ class GameManager {
         void removeEnemy(Enemy* enemy);
         void randomItemsPlacement();
         void removeItem(Item* item);
+
+    private:
+        bool placeItem(Item* item, const Room& room, float spawnChancePercent, bool multiplyFloor);
 };
 
 #endif

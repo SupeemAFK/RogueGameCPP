@@ -95,6 +95,6 @@ void Enemy::damaged(float damage) {
 }
 
 void Enemy::die() {
-    dungeon->map[monsterY][monsterX] = '.';
+    dungeon->map[monsterY][monsterX] = previousTile;
     gm->removeEnemy(this);
 }
