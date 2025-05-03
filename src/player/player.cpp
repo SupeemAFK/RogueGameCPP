@@ -56,7 +56,7 @@ void::Player::movePlayer(vector<int> direction) {
         return;
     }
     //Check if enemy
-    for (auto& enemy : gm->enemies) {
+    for (Enemy* enemy : gm->enemies) {
         if (enemy->monsterX == newPositionX && enemy->monsterY == newPositionY) {
             //Attack enemy miss, chance etc..
             enemy->damaged(50);
@@ -64,20 +64,12 @@ void::Player::movePlayer(vector<int> direction) {
         }
     }
     //Check if item
-    for (auto& item : gm->items) {
+    for (Item* item : gm->items) {
         if (item->getX() == newPositionX && item->getY() == newPositionY) {
-            if (find(gm->inventory.getInventoryKeys().begin(), gm->inventory.getInventoryKeys().end(), item) != gm->inventory.getInventoryKeys().end()) {
-                bool success = gm->inventory.addItemToInventory(item);
-                if (success) dungeon->map[newPositionY][newPositionX] = '.';
-                gm->removeItem(item);       
-            }
-            else {
-                bool success = gm->inventory.addItemToInventory(item);
-                if (success) dungeon->map[newPositionY][newPositionX] = '.';
-                item->setX(-100000);
-                item->setY(-100000);
-            }
-            gm->setNumItem(gm->inventory.getInventoryKeys().size()); //set ui num to last item
+            bool success = gm->inventory.addItemToInventory(item);
+            if (success) dungeon->map[newPositionY][newPositionX] = '.';
+            item->setX(-100000);
+            item->setY(-100000);
         }
     }
 

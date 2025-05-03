@@ -23,13 +23,16 @@ void GameManager::startGame() {
 void GameManager::goToNextFloor() {
     dungeon.generateDungeon();
 
-    for (auto enemy : enemies) {
+    for (Enemy* enemy : enemies) {
         delete enemy;
     }
     enemies.clear();
 
-    for (auto item : items) {
-        delete item;
+    for (Item* item : items) {
+        //Not exists in key
+        if (find(inventory.getInventoryKeys().begin(), inventory.getInventoryKeys().end(), item) == inventory.getInventoryKeys().end()) {
+            delete item;
+        }         
     }
     items.clear();
 
@@ -43,12 +46,12 @@ void GameManager::goToNextFloor() {
 void GameManager::restartGame() {
     dungeon.generateDungeon();
 
-    for (auto enemy : enemies) {
+    for (Enemy* enemy : enemies) {
         delete enemy;
     }
     enemies.clear();
 
-    for (auto item : items) {
+    for (Item* item : items) {
         delete item;
     }
     items.clear();

@@ -65,8 +65,7 @@ int main() {
         }
         else if ((ch == 'c' || ch == 'C') && !gameManager.player.die) {
             Item* item = gameManager.inventory.getInventoryKeys()[gameManager.getNumItem() - 1];
-            bool success = gameManager.inventory.discardItemFromInventory(item);
-            if (success) gameManager.setNumItem(gameManager.inventory.getInventoryKeys().size()); //set ui num to last item
+            gameManager.inventory.discardItemFromInventory(item);
         }
         else if (ch == '1' && !gameManager.player.die) {
             gameManager.setNumItem(1);

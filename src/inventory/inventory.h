@@ -17,7 +17,7 @@ class Inventory {
 
         bool addItemToInventory(Item* itemName);
         void decreaseItemAmount(Item* itemName);
-        bool discardItemFromInventory(Item* itemName);
+        void discardItemFromInventory(Item* itemName);
         void useItem(int index);
         void clearInventory();
         bool isFull();

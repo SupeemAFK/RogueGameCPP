@@ -15,6 +15,7 @@ bool Inventory::addItemToInventory(Item* item) {
         if (isFull()) return false;
         inventoryKeys.push_back(item);
         inventoryTable.insert(item->getName(), 1);
+        gm->setNumItem(inventoryKeys.size());        
         return true;
     }
 }
@@ -31,17 +32,14 @@ void Inventory::decreaseItemAmount(Item* item) {
     }
 }
 
-bool Inventory::discardItemFromInventory(Item* item) {
+void Inventory::discardItemFromInventory(Item* item) {
     int* amount = inventoryTable.search(item->getName());
     if (amount != nullptr) {
         gm->removeItem(item);
         inventoryTable.remove(item->getName());
         auto it = std::find(inventoryKeys.begin(), inventoryKeys.end(), item);
         if (it != inventoryKeys.end()) inventoryKeys.erase(it);
-        return true;
-    }
-    else {
-        return false;
+        gm->setNumItem(inventoryKeys.size());        
     }
 }
 
