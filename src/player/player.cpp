@@ -109,6 +109,7 @@ void Player::resetPlayer() {
     playerCoin = 0;
     playerFloor = 1;
     level = 1;
+    removeWeapon();
 }
 
 optional<Weapon> Player::getPlayerWeapon() {
