@@ -63,6 +63,15 @@ void HashTable<KeyType, ValueType>::remove(const KeyType& key) {
     while (table[index].occupied) {
         if (table[index].key == key) {
             table[index].occupied = false;
+
+            // Rehash following cluster
+            index = (index + 1) % tableSize;
+            while (table[index].occupied) {
+                Entry temp = table[index];
+                table[index].occupied = false;
+                insert(temp.key, temp.value); 
+                index = (index + 1) % tableSize;
+            }
             return;
         }
         index = (index + 1) % tableSize;

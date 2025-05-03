@@ -35,7 +35,6 @@ void Inventory::decreaseItemAmount(Item* item) {
 void Inventory::discardItemFromInventory(Item* item) {
     int* amount = inventoryTable.search(item->getName());
     if (amount != nullptr) {
-        gm->removeItem(item);
         inventoryTable.remove(item->getName());
         auto it = std::find(inventoryKeys.begin(), inventoryKeys.end(), item);
         if (it != inventoryKeys.end()) inventoryKeys.erase(it);

@@ -109,19 +109,19 @@ void GameManager::randomItemsPlacement() {
 
         //Weapons
         SteelSword* steelSword = new SteelSword();
-        placeItem(steelSword, room, 0.0125, true);
+        placeItem(steelSword, room, 0.5, true);
 
         Dagger* dagger = new Dagger();
-        placeItem(dagger, room, 0.025, true);
+        placeItem(dagger, room, 0.5, true);
 
         Katana* katana = new Katana();
-        placeItem(katana, room, 0.00625, true);
+        placeItem(katana, room, 0.5, true);
 
         Axe* axe = new Axe();
-        placeItem(axe, room, 0.0125, true);
+        placeItem(axe, room, 0.5, true);
 
         Hammer* hammer = new Hammer();
-        placeItem(hammer, room, 0.005, true);
+        placeItem(hammer, room, 0.5, true);
     }
 }
 
