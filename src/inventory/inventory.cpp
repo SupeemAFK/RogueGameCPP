@@ -13,7 +13,7 @@ bool Inventory::addItemToInventory(Item* item) {
     }
     else {
         if (isFull()) return false;
-        inventoryKeys.push_back(item);
+        inventoryKeys.push_back(item->clone());
         inventoryTable.insert(item->getName(), 1);
         gm->setNumItem(inventoryKeys.size());        
         return true;

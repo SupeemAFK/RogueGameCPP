@@ -1,9 +1,6 @@
-#include <vector>
 #include "./player.h"
 #include "../dungeon/dungeon.h"
 #include "../gameManager/gameManager.h"
-
-using namespace std;
 
 Player::Player(Dungeon* _dungeon, GameManager* _gm, float _maxHealth) :
     playerX(0), 
@@ -11,7 +8,8 @@ Player::Player(Dungeon* _dungeon, GameManager* _gm, float _maxHealth) :
     level(1),
     playerCoin(0), 
     playerFloor(1), 
-    playerWeapon(nullptr),
+    playerWeapon(nullopt),
+    playerWeaponRef(nullptr),
     previousTile('.'), 
     maxHealth(_maxHealth),
     health(_maxHealth),
@@ -114,12 +112,21 @@ void Player::resetPlayer() {
     level = 1;
 }
 
-Weapon* Player::getPlayerWeapon() {
+optional<Weapon> Player::getPlayerWeapon() {
     return playerWeapon;
 }
 
+Weapon* Player::getPlayerWeaponRef() {
+    return playerWeaponRef;
+}
+
 void Player::setPlayerWeapon(Weapon* weapon) {
-    if (playerWeapon == nullptr) {
-        playerWeapon = weapon;
+    if (playerWeaponRef == nullptr && playerWeapon == nullopt) {
+        playerWeaponRef = weapon;
+        playerWeapon = *playerWeaponRef;
     }
+}
+
+void Player::removeWeapon() {
+    playerWeapon = nullopt;
 }

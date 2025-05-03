@@ -81,10 +81,12 @@ void GameUI::drawPlayerStatus() {
     mvwprintw(uiWin, y++, 4, "Coins: %d", gm->player.playerCoin);
 
     string weaponName = "Fist";
-    if (gm->player.getPlayerWeapon() != nullptr) {
-        weaponName = gm->player.getPlayerWeapon()->getName();
-    }
+    if (gm->player.getPlayerWeapon() != nullopt) weaponName = gm->player.getPlayerWeapon()->getName();
     mvwprintw(uiWin, y++, 4, "Weapon: %s", weaponName.c_str());
+    if (gm->player.getPlayerWeapon() != nullopt) {
+        mvwprintw(uiWin, y++, 4, "Prees V to move to inventory.");
+        mvwprintw(uiWin, y++, 4, "Prees B to discard equipped weapon.");
+    }
     
     mvwprintw(uiWin, y++, 2, "Inventory:");
     for (int i = 0; i < gm->inventory.getInventoryKeys().size(); ++i) {

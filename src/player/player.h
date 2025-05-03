@@ -2,10 +2,13 @@
 #define PLAYER_H
 
 #include <vector>
+#include <optional>
+#include "../Item/weapon/weapon.h"
+
+using namespace std;
 
 class Dungeon;
 class GameManager;
-class Weapon;
 
 class Player {
     public:
@@ -25,13 +28,16 @@ class Player {
         void healPlayer(float amount);
         float getCurrentHealth();
         void resetPlayer();
-        Weapon* getPlayerWeapon();
+        optional<Weapon> getPlayerWeapon();
+        Weapon* getPlayerWeaponRef();
         void setPlayerWeapon(Weapon* weapon);
+        void removeWeapon();
 
     private:
         Dungeon* dungeon;
         GameManager* gm;
-        Weapon* playerWeapon;
+        optional<Weapon> playerWeapon;
+        Weapon* playerWeaponRef;
 
         char previousTile;
         float health;
