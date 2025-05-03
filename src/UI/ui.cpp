@@ -99,8 +99,15 @@ void GameUI::drawPlayerStatus() {
             if (i + 1 == gm->getNumItem()) mvwprintw(uiWin, y - 1, 4 + strlen(buffer) + 1, "<-----");
         }
     }
-    mvwprintw(uiWin, y++, 4, "Pree E to use item.");
-    mvwprintw(uiWin, y++, 4, "Pree C to discrad item.");
+    if (gm->inventory.getInventoryKeys().size() > 0) {
+        mvwprintw(uiWin, y++, 4, "");
+        mvwprintw(uiWin, y++, 4, "<----Item description---->");
+        Item* item = gm->inventory.getInventoryKeys()[gm->getNumItem()-1];
+        mvwprintw(uiWin, y++, 4, "%s", item->getDescriptions().c_str());
+        mvwprintw(uiWin, y++, 4, "");
+        mvwprintw(uiWin, y++, 4, "Pree E to use item.");
+        mvwprintw(uiWin, y++, 4, "Pree C to discrad item.");
+    }
 }
 
 void GameUI::drawDialogue(int startY) {
