@@ -66,10 +66,18 @@ void::Player::movePlayer(vector<int> direction) {
     //Check if item
     for (Item* item : gm->items) {
         if (item->getX() == newPositionX && item->getY() == newPositionY) {
-            bool success = gm->inventory.addItemToInventory(item);
-            if (success) dungeon->map[newPositionY][newPositionX] = '.';
-            item->setX(-100000);
-            item->setY(-100000);
+            int* amount = gm->inventory.getHashTable().search(item->getName());
+            if (amount == nullptr) {
+                bool success = gm->inventory.addItemToInventory(item);
+                if (success) dungeon->map[newPositionY][newPositionX] = '.';
+                item->setX(-100000);
+                item->setY(-100000);
+            }
+            else {
+                bool success = gm->inventory.addItemToInventory(item);
+                if (success) dungeon->map[newPositionY][newPositionX] = '.';
+                gm->removeItem(item);
+            }
         }
     }
 
