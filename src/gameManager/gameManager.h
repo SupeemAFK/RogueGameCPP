@@ -1,6 +1,7 @@
 #ifndef GAMEMANAGER_H
 #define GAMEMANAGER_H
 
+#include "../UI/ui.h"
 #include "../dungeon/dungeon.h"
 #include "../coin/coin.h"
 #include "../nextLevel/nextLevel.h"
@@ -28,6 +29,7 @@ class GameManager {
         NextLevel door;
         Player player;
         Inventory inventory;
+        GameUI ui;
         GameManager();
 
         void startGame();

@@ -13,12 +13,11 @@ int main() {
 
     //Start
     GameManager gameManager;
-    GameUI ui(&gameManager);
 
     gameManager.startGame();
-    ui.initUI();
-    ui.updateGameScreen();
-    ui.updateUI();
+    gameManager.ui.initUI();
+    gameManager.ui.updateGameScreen();
+    gameManager.ui.updateUI();
 
     //Update
     int ch;
@@ -93,11 +92,11 @@ int main() {
         }
 
         if (gameManager.player.die) {
-            ui.drawDeathScreen();
+            gameManager.ui.drawDeathScreen();
         }
         else {
-            ui.updateGameScreen(); //Always update game screen
-            ui.updateUI(); //Always update UI
+            gameManager.ui.updateGameScreen(); //Always update game screen
+            gameManager.ui.updateUI(); //Always update UI
         }
     }
 

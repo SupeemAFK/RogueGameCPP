@@ -55,9 +55,32 @@ void::Player::movePlayer(vector<int> direction) {
     //Check if enemy
     for (Enemy* enemy : gm->enemies) {
         if (enemy->monsterX == newPositionX && enemy->monsterY == newPositionY) {
-            //Attack enemy miss, chance etc..
-            enemy->damaged(50);
-            return;
+            float roll = static_cast<float>(rand()) / RAND_MAX;
+            if (playerWeapon == nullopt) {
+                if (roll < 0.9) {
+                    enemy->damaged(15);
+                    gm->ui.addLog("Player attack 15 damage.");
+                    return;
+                } 
+                else {
+                    gm->ui.addLog("Player attack missed.");
+                    return;
+                }
+            }
+            else {
+                if (roll < playerWeapon->hitChance) {
+                    enemy->damaged(playerWeapon->damage);
+
+                    char buffer[256];
+                    snprintf(buffer, sizeof(buffer), "Player attack %d damage", playerWeapon->damage);
+                    gm->ui.addLog(string(buffer));
+                    return;
+                } 
+                else {
+                    gm->ui.addLog("Player attack missed.");
+                    return;
+                }
+            }
         }
     }
     //Check if item

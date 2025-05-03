@@ -10,6 +10,7 @@ class Enemy {
         int monsterX;
         int monsterY;
         float damage = 10;
+        float hitChance = 0.35;
         char previousTile = '.';
         char monsterRender = 'K';
         

@@ -8,7 +8,8 @@ GameManager::GameManager() :
     coins(&dungeon),
     door(&dungeon),
     player(&dungeon, this, 100),
-    inventory(this)
+    inventory(this),
+    ui(this)
 {}
 
 void GameManager::startGame() {

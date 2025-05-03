@@ -1,5 +1,5 @@
 #include "./hammer.h"
 
 Hammer::Hammer() 
-    : Weapon("Hammer", "Hammer can attack with 50 damage", '?', 50)
+    : Weapon("Hammer", "Hammer can attack with 50 damage", '?', 50, 0.2)
 {}

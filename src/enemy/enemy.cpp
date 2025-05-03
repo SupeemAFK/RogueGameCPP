@@ -84,8 +84,17 @@ void Enemy::checkNextToPlayer() {
     (monsterX > 0 && dungeon->map[monsterY][monsterX - 1] == '@') || // left
     (monsterX + 1 < dungeon->map[0].size() && dungeon->map[monsterY][monsterX + 1] == '@')) // right
     {
-        //Attack player miss, chance etc..
-        player->damaged(damage);
+        float roll = static_cast<float>(rand()) / RAND_MAX;
+        if (roll < hitChance) {
+            player->damaged(damage);
+
+            char buffer[256];
+            snprintf(buffer, sizeof(buffer), "Enemy attack %d damage", damage);
+            gm->ui.addLog(string(buffer));
+        }
+        else {
+            gm->ui.addLog("Enemy attack missed.");
+        }
     }
 }
 

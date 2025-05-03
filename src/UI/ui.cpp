@@ -126,8 +126,25 @@ void GameUI::drawDialogue(int startY) {
     }
 
     // Draw dialogue text next to art
-    mvwprintw(uiWin, startY, 12, "Hello, adventurer!");
-    mvwprintw(uiWin, startY + 1, 12, "Be careful ahead...");
+    int y = startY;
+    mvwprintw(uiWin, y, 12, "Ashen Ones:");
+    if (logs.size() <= 0) {
+        mvwprintw(uiWin, y+1, 12, "I'm your partner!");
+        mvwprintw(uiWin, y+2, 12, "I'll keep you updated!");
+    }
+    {
+        lock_guard<mutex> lock(logMutex);
+        auto now = chrono::steady_clock::now();
+
+        logs.erase(remove_if(logs.begin(), logs.end(),
+            [now](const TimedLog& log) {
+                return chrono::duration_cast<chrono::seconds>(now - log.timestamp).count() > 0.05;
+            }), logs.end());
+
+        for (const TimedLog& log : logs) {
+            mvwprintw(uiWin, y++, 12, "- %s", log.text.c_str());
+        }
+    }
 }
 
 void GameUI::drawPlayerControl(int startY) {
@@ -167,7 +184,7 @@ void GameUI::updateUI() {
     box(uiWin, 0, 0);
 
     drawPlayerStatus();
-    drawDialogue(20);
+    drawDialogue(18);
     drawPlayerControl(25);
 
     wrefresh(uiWin);
@@ -177,4 +194,9 @@ void GameUI::updateGameScreen() {
     werase(gameWin);
     box(gameWin, 0, 0);
     drawDungeon();
+}
+
+void GameUI::addLog(string text) {
+    lock_guard<mutex> lock(logMutex);
+    logs.push_back({text, chrono::steady_clock::now()});
 }
