@@ -68,14 +68,14 @@ int main() {
             gameManager.inventory.discardItemFromInventory(item);
         }
         else if ((ch == 'v' || ch == 'V') && !gameManager.player.die) {
-            bool success = gameManager.inventory.addItemToInventory(gameManager.player.getPlayerWeaponRef());
+            if (gameManager.player.getPlayerWeapon() == nullopt) return 0;
+            bool success = gameManager.inventory.addItemToInventory(new Weapon(*gameManager.player.getPlayerWeapon()));
             if (success) {
                 gameManager.player.removeWeapon();
             }
         }
         else if ((ch == 'b' || ch == 'B') && !gameManager.player.die) {
             gameManager.player.removeWeapon();
-            gameManager.removeItem(gameManager.player.getPlayerWeaponRef());
         }
         else if (ch == '1' && !gameManager.player.die) {
             gameManager.setNumItem(1);

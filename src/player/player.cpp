@@ -9,7 +9,6 @@ Player::Player(Dungeon* _dungeon, GameManager* _gm, float _maxHealth) :
     playerCoin(0), 
     playerFloor(1), 
     playerWeapon(nullopt),
-    playerWeaponRef(nullptr),
     previousTile('.'), 
     maxHealth(_maxHealth),
     health(_maxHealth),
@@ -116,14 +115,9 @@ optional<Weapon> Player::getPlayerWeapon() {
     return playerWeapon;
 }
 
-Weapon* Player::getPlayerWeaponRef() {
-    return playerWeaponRef;
-}
-
-void Player::setPlayerWeapon(Weapon* weapon) {
-    if (playerWeaponRef == nullptr && playerWeapon == nullopt) {
-        playerWeaponRef = weapon;
-        playerWeapon = *playerWeaponRef;
+void Player::setPlayerWeapon(Weapon weapon) {
+    if (playerWeapon == nullopt) {
+        playerWeapon = weapon;
     }
 }
 

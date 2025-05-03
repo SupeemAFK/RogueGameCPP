@@ -29,15 +29,13 @@ class Player {
         float getCurrentHealth();
         void resetPlayer();
         optional<Weapon> getPlayerWeapon();
-        Weapon* getPlayerWeaponRef();
-        void setPlayerWeapon(Weapon* weapon);
+        void setPlayerWeapon(Weapon weapon);
         void removeWeapon();
 
     private:
         Dungeon* dungeon;
         GameManager* gm;
         optional<Weapon> playerWeapon;
-        Weapon* playerWeaponRef;
 
         char previousTile;
         float health;

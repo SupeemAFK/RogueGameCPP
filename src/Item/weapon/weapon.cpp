@@ -7,5 +7,5 @@ Weapon::Weapon(string weaponName, string weaponDescriptions, char weaponRender, 
 {}
 
 void Weapon::use() {
-    gm->player.setPlayerWeapon(this);
+    gm->player.setPlayerWeapon(*this);
 }
