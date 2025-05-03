@@ -66,8 +66,18 @@ void::Player::movePlayer(vector<int> direction) {
     //Check if item
     for (auto& item : gm->items) {
         if (item->getX() == newPositionX && item->getY() == newPositionY) {
-            bool success = gm->inventory.addItemToInventory(item);
-            if (success) dungeon->map[newPositionY][newPositionX] = '.';
+            if (find(gm->inventory.getInventoryKeys().begin(), gm->inventory.getInventoryKeys().end(), item) != gm->inventory.getInventoryKeys().end()) {
+                bool success = gm->inventory.addItemToInventory(item);
+                if (success) dungeon->map[newPositionY][newPositionX] = '.';
+                gm->removeItem(item);       
+            }
+            else {
+                bool success = gm->inventory.addItemToInventory(item);
+                if (success) dungeon->map[newPositionY][newPositionX] = '.';
+                item->setX(-100000);
+                item->setY(-100000);
+            }
+            gm->setNumItem(gm->inventory.getInventoryKeys().size()); //set ui num to last item
         }
     }
 

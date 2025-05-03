@@ -9,11 +9,15 @@
 
 using namespace std;
 
+class GameManager;
+
 class Inventory {
     public:
+        Inventory(GameManager* _gm);
+
         bool addItemToInventory(Item* itemName);
         void decreaseItemAmount(Item* itemName);
-        void discardItemFromInventory(Item* itemName);
+        bool discardItemFromInventory(Item* itemName);
         void useItem(int index);
         void clearInventory();
         bool isFull();
@@ -21,6 +25,8 @@ class Inventory {
         HashTable<string, int> getHashTable();
 
     private:
+        GameManager* gm;
+
         HashTable<string, int> inventoryTable;
         vector<Item*> inventoryKeys;
 };

@@ -37,8 +37,12 @@ class GameManager {
         void removeEnemy(Enemy* enemy);
         void randomItemsPlacement();
         void removeItem(Item* item);
+        int getNumItem();
+        void setNumItem(int num);
 
     private:
+        int numItem = 1;
+
         bool placeItem(Item* item, const Room& room, float spawnChancePercent, bool multiplyFloor);
 };
 

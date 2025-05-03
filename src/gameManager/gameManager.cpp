@@ -8,7 +8,7 @@ GameManager::GameManager() :
     coins(&dungeon),
     door(&dungeon),
     player(&dungeon, this, 100),
-    inventory()
+    inventory(this)
 {}
 
 void GameManager::startGame() {
@@ -173,4 +173,12 @@ bool GameManager::placeItem(Item* item, const Room& room, float spawnChancePerce
     //return false when fail to find postion after many tries
     delete item;
     return false;
+}
+
+int GameManager::getNumItem() {
+    return numItem;
+}
+
+void GameManager::setNumItem(int num) {
+    numItem = num;
 }

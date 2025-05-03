@@ -1,10 +1,7 @@
 #include "./ui.h"
-#include "../dungeon/dungeon.h"
-#include "../player/player.h"
-#include "../inventory/inventory.h"
-#include "../Item/weapon/weapon.h"
+#include "../gameManager/gameManager.h"
 
-GameUI::GameUI(Dungeon* _dungeon, Player* _player, Inventory* _inventory) : dungeon(_dungeon), player(_player), inventory(_inventory) {}
+GameUI::GameUI(GameManager* _gm) : gm(_gm) {}
 
 void GameUI::initUI() {
     setlocale(LC_ALL, "en_US.UTF-8");
@@ -26,7 +23,7 @@ void GameUI::initUI() {
     int screenHeight, screenWidth;
     getmaxyx(stdscr, screenHeight, screenWidth);
 
-    int gameWidth = dungeon->MAP_WIDTH;
+    int gameWidth = gm->dungeon.MAP_WIDTH;
     int uiWidth = screenWidth - gameWidth;
 
     gameWin = newwin(screenHeight, gameWidth, 0, 0);
@@ -40,9 +37,9 @@ void GameUI::initUI() {
 }
 
 void GameUI::drawDungeon() {
-    for (size_t y = 0; y < dungeon->map.size(); ++y) {
-        for (size_t x = 0; x < dungeon->map[y].size(); ++x) {
-            char tile = dungeon->map[y][x];
+    for (size_t y = 0; y < gm->dungeon.map.size(); ++y) {
+        for (size_t x = 0; x < gm->dungeon.map[y].size(); ++x) {
+            char tile = gm->dungeon.map[y][x];
             if (tile == '@') {
                 wattron(gameWin, COLOR_PAIR(1));
             }
@@ -60,7 +57,7 @@ void GameUI::drawDungeon() {
             }
 
             //Draw tile
-            mvwaddch(gameWin, y + 1, x + 1, dungeon->map[y][x]);
+            mvwaddch(gameWin, y + 1, x + 1, gm->dungeon.map[y][x]);
 
             //Turn off color
             wattroff(gameWin, COLOR_PAIR(1));
@@ -76,27 +73,32 @@ void GameUI::drawDungeon() {
 void GameUI::drawPlayerStatus() {
     int y = 1;
 
-    mvwprintw(uiWin, y++, 2, "Floor: %d", player->playerFloor);
+    mvwprintw(uiWin, y++, 2, "Floor: %d", gm->player.playerFloor);
 
     mvwprintw(uiWin, y++, 2, "Player:");
-    mvwprintw(uiWin, y++, 4, "Level: %d", player->level);
-    mvwprintw(uiWin, y++, 4, "HP: %d/%d", (int)player->getCurrentHealth(), (int)player->maxHealth);
-    mvwprintw(uiWin, y++, 4, "Coins: %d", player->playerCoin);
+    mvwprintw(uiWin, y++, 4, "Level: %d", gm->player.level);
+    mvwprintw(uiWin, y++, 4, "HP: %d/%d", (int)gm->player.getCurrentHealth(), (int)gm->player.maxHealth);
+    mvwprintw(uiWin, y++, 4, "Coins: %d", gm->player.playerCoin);
 
     string weaponName = "Fist";
-    if (player->getPlayerWeapon() != nullptr) {
-        weaponName = player->getPlayerWeapon()->getName();
+    if (gm->player.getPlayerWeapon() != nullptr) {
+        weaponName = gm->player.getPlayerWeapon()->getName();
     }
     mvwprintw(uiWin, y++, 4, "Weapon: %s", weaponName.c_str());
     
     mvwprintw(uiWin, y++, 2, "Inventory:");
-    for (int i = 0; i < inventory->getInventoryKeys().size(); ++i) {
-        Item* item = inventory->getInventoryKeys()[i];
-        int* amount = inventory->getHashTable().search(item->getName());
+    for (int i = 0; i < gm->inventory.getInventoryKeys().size(); ++i) {
+        Item* item = gm->inventory.getInventoryKeys()[i];
+        int* amount = gm->inventory.getHashTable().search(item->getName());
         if (amount) {
-            mvwprintw(uiWin, y++, 4, "%d.) %s x%d", i + 1, item->getName().c_str(), *amount);
+            char buffer[256];
+            snprintf(buffer, sizeof(buffer), "%d.) %s x%d", i + 1, item->getName().c_str(), *amount);
+            mvwprintw(uiWin, y++, 4, "%s", buffer);
+            if (i + 1 == gm->getNumItem()) mvwprintw(uiWin, y - 1, 4 + strlen(buffer) + 1, "<-----");
         }
     }
+    mvwprintw(uiWin, y++, 4, "Pree E to use item.");
+    mvwprintw(uiWin, y++, 4, "Pree C to discrad item.");
 }
 
 void GameUI::drawDialogue(int startY) {

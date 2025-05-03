@@ -13,7 +13,7 @@ int main() {
 
     //Start
     GameManager gameManager;
-    GameUI ui(&gameManager.dungeon, &gameManager.player, &gameManager.inventory);
+    GameUI ui(&gameManager);
 
     gameManager.startGame();
     ui.initUI();
@@ -60,20 +60,28 @@ int main() {
                 enemy->checkNextToPlayer();
             }
         }
+        else if ((ch == 'e' || ch == 'E') && !gameManager.player.die) {
+            gameManager.inventory.useItem(gameManager.getNumItem() - 1);
+        }
+        else if ((ch == 'c' || ch == 'C') && !gameManager.player.die) {
+            Item* item = gameManager.inventory.getInventoryKeys()[gameManager.getNumItem() - 1];
+            bool success = gameManager.inventory.discardItemFromInventory(item);
+            if (success) gameManager.setNumItem(gameManager.inventory.getInventoryKeys().size()); //set ui num to last item
+        }
         else if (ch == '1' && !gameManager.player.die) {
-            gameManager.inventory.useItem(0);
+            gameManager.setNumItem(1);
         }
         else if (ch == '2' && !gameManager.player.die) {
-            gameManager.inventory.useItem(1);
+            gameManager.setNumItem(2);
         }
         else if (ch == '3' && !gameManager.player.die) {
-            gameManager.inventory.useItem(2);
+            gameManager.setNumItem(3);
         }
         else if (ch == '4' && !gameManager.player.die) {
-            gameManager.inventory.useItem(3);
+            gameManager.setNumItem(4);
         }
         else if (ch == '5' && !gameManager.player.die) {
-            gameManager.inventory.useItem(4);
+            gameManager.setNumItem(5);
         }
 
         if (gameManager.player.die) {

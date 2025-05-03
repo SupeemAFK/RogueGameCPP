@@ -8,16 +8,14 @@
 #include <ncursesw/ncurses.h>
 #include "../../assets/skull.h"
 
-class Dungeon;
-class Player;
-class Inventory;
+class GameManager;
 
 class GameUI {
     public:
         WINDOW* gameWin;
         WINDOW* uiWin;
 
-        GameUI(Dungeon* _dungeon, Player* _player, Inventory* _inventory);
+        GameUI(GameManager* _gm);
 
         void initUI();
         void updateUI();
@@ -25,9 +23,7 @@ class GameUI {
         void drawDeathScreen();
 
     private:
-        Dungeon* dungeon;
-        Player* player;
-        Inventory* inventory;
+        GameManager* gm;
 
         void drawDungeon();
         void drawPlayerStatus();
