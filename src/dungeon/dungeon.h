@@ -1,6 +1,7 @@
 #ifndef DUNGEON_H
 #define DUNGEON_H
 
+#include "../lib/priorityqueue/PriorityQueue.h"
 #include <iostream>
 #include <vector>
 #include <queue>
@@ -17,6 +18,7 @@ struct Edge {
     int roomA, roomB;
     float weight;
     bool operator>(const Edge& other) const;
+    bool operator<(const Edge& other) const;
 };
 
 class Dungeon {

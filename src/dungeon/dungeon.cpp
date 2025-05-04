@@ -13,6 +13,10 @@ bool Edge::operator>(const Edge& other) const {
     return weight > other.weight;
 }
 
+bool Edge::operator<(const Edge& other) const {
+    return weight < other.weight;
+}
+
 Dungeon::Dungeon():
     MAP_WIDTH(80),
     MAP_HEIGHT(20),
@@ -95,7 +99,7 @@ void Dungeon::generateRooms() {
 
 std::vector<std::pair<int, int>> Dungeon::createMST() {
     std::vector<std::pair<int, int>> mstEdges;
-    std::priority_queue<Edge, std::vector<Edge>, std::greater<Edge>> pq;
+    PriorityQueue<Edge> pq; // Use custom priority queue
     std::vector<bool> inMST(rooms.size(), false);
 
     inMST[0] = true;
@@ -123,32 +127,33 @@ std::vector<std::pair<int, int>> Dungeon::createMST() {
 }
 
 void Dungeon::moveStickedCorridor(int& bendX, int& bendY, const Room& roomA, const Room& roomB) {
-    int correctionX = 0, correctionY = 0;
+    int correctionXA = 0, correctionYA = 0;
+    int correctionXB = 0, correctionYB = 0;
 
-    //RoomA
-    if (roomA.x == bendX + 1) correctionX = 2;
-    else if (roomA.x + roomA.width == bendX) correctionX = -2;
-    else if (roomA.x == bendX) correctionX = 1;
-    else if (roomA.x + roomA.width == bendX + 1) correctionX = -1;
+    //Room A
+    if (roomA.x == bendX + 1) correctionXA = 1;
+    else if (roomA.x + roomA.width == bendX) correctionXA = -1;
+    else if (roomA.x == bendX) correctionXA = 1;
+    else if (roomA.x + roomA.width == bendX + 1) correctionXA = -1;
 
-    if (roomA.y == bendY + 1) correctionY = 2;
-    else if (roomA.y + roomA.height == bendY) correctionY = -2;
-    else if (roomA.y == bendY) correctionY = 1;
-    else if (roomA.y + roomA.height == bendY + 1) correctionY = -1;
+    if (roomA.y == bendY + 1) correctionYA = 1;
+    else if (roomA.y + roomA.height == bendY) correctionYA = -1;
+    else if (roomA.y == bendY) correctionYA = 1;
+    else if (roomA.y + roomA.height == bendY + 1) correctionYA = -1;
 
-    //RoomB
-    if (roomB.x == bendX + 1) correctionX = 2;
-    else if (roomB.x + roomB.width == bendX) correctionX = -2;
-    else if (roomB.x == bendX) correctionX = 1;
-    else if (roomB.x + roomB.width == bendX + 1) correctionX = -1;
+    //Room B
+    if (roomB.x == bendX + 1) correctionXB = 1;
+    else if (roomB.x + roomB.width == bendX) correctionXB = -1;
+    else if (roomB.x == bendX) correctionXB = 1;
+    else if (roomB.x + roomB.width == bendX + 1) correctionXB = -1;
 
-    if (roomB.y == bendY + 1) correctionY = 2;
-    else if (roomB.y + roomB.height == bendY) correctionY = -2;
-    else if (roomB.y == bendY) correctionY = 1;
-    else if (roomB.y + roomB.height == bendY + 1) correctionY = -1;
+    if (roomB.y == bendY + 1) correctionYB = 1;
+    else if (roomB.y + roomB.height == bendY) correctionYB = -1;
+    else if (roomB.y == bendY) correctionYB = 1;
+    else if (roomB.y + roomB.height == bendY + 1) correctionYB = -1;
 
-    bendX += correctionX;
-    bendY += correctionY;
+    bendX += correctionXA + correctionXB;
+    bendY += correctionYA + correctionYB;
 }
 
 void Dungeon::drawCorridor(const Room& a, const Room& b) {
@@ -162,33 +167,31 @@ void Dungeon::drawCorridor(const Room& a, const Room& b) {
 
     moveStickedCorridor(bendX, bendY, a, b);
 
-    //Handle starting point
-    if (map[y1][x1] == '|' || map[y1][x1] == '-') {
-        map[y1][x1] = '+';
-    } else if (map[y1][x1] == ' ') {
-        map[y1][x1] = '#';
-    }
+    //Draw starting point
+    if (map[y1][x1] == '|' || map[y1][x1] == '-') map[y1][x1] = '+';
+    else if (map[y1][x1] == ' ') map[y1][x1] = '#';
 
-    //First leg (horizontal)
+    //First leg: horizontal from x1 to bendX at y1
     int dx = (bendX > x1) ? 1 : -1;
     for (int x = x1 + dx; x != bendX + dx; x += dx) {
         if (map[y1][x] == ' ') map[y1][x] = '#';
         else if (map[y1][x] == '|' || map[y1][x] == '-') map[y1][x] = '+';
     }
 
-    //Handle bend point
-    if (map[bendY][bendX] == '|' || map[bendY][bendX] == '-') {
-        map[bendY][bendX] = '+';
-    } else if (map[bendY][bendX] == ' ') {
-        map[bendY][bendX] = '#';
-    }
+    //Draw bend point
+    if (map[bendY][bendX] == ' ') map[bendY][bendX] = '#';
+    else if (map[bendY][bendX] == '|' || map[bendY][bendX] == '-') map[bendY][bendX] = '+';
 
-    //Second leg (vertical)
+    //Second leg: vertical from bendY to y2 at bendX
     int dy = (y2 > bendY) ? 1 : -1;
     for (int y = bendY + dy; y != y2 + dy; y += dy) {
         if (map[y][bendX] == ' ') map[y][bendX] = '#';
         else if (map[y][bendX] == '|' || map[y][bendX] == '-') map[y][bendX] = '+';
     }
+
+    //Draw ending point
+    if (map[y2][x2] == '|' || map[y2][x2] == '-') map[y2][x2] = '+';
+    else if (map[y2][x2] == ' ') map[y2][x2] = '#';
 }
 
 void Dungeon::generateCorridors(const std::vector<std::pair<int, int>>& edges) {
