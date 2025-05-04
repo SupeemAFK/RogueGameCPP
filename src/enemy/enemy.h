@@ -11,10 +11,11 @@ class Enemy {
         int monsterY;
         float damage = 10;
         float hitChance = 0.35;
+        float maxHealth;
         char previousTile = '.';
         char monsterRender = 'K';
         
-        Enemy(Player* _player, Dungeon* _dungeon, GameManager* _gm, float maxHealth, int _enemyX, int _enemyY);
+        Enemy(Player* _player, Dungeon* _dungeon, GameManager* _gm, float _maxHealth, float _damage, int _enemyX, int _enemyY);
         
         void randomMoveMonster();
         void moveToPlayer();

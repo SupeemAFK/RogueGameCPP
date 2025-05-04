@@ -4,11 +4,13 @@
 #include "../gameManager/gameManager.h"
 #include <random>
 
-Enemy::Enemy(Player* _player, Dungeon* _dungeon, GameManager* _gm, float maxHealth, int _enemyX, int _enemyY) : 
+Enemy::Enemy(Player* _player, Dungeon* _dungeon, GameManager* _gm, float _maxHealth, float _damage, int _enemyX, int _enemyY) : 
     player(_player), 
     dungeon(_dungeon), 
     gm(_gm),
-    health(maxHealth),
+    maxHealth(_maxHealth),
+    health(_maxHealth),
+    damage(_damage),
     monsterX(_enemyX),
     monsterY(_enemyY)
 {}

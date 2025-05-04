@@ -78,7 +78,7 @@ void GameManager::randomEnemiesPlacement() {
             int randomY = room.y + (rand() % room.height);
             if (dungeon.map[randomY][randomX] != '-' && dungeon.map[randomY][randomX] != '|') {
                 if (dungeon.map[randomY][randomX] == '.') {
-                    Enemy* enemy = new Enemy(&player, &dungeon, this, 100, randomX, randomY);
+                    Enemy* enemy = new Enemy(&player, &dungeon, this, 100 * pow(1.125, player.playerFloor), 10 * pow(1.125, player.playerFloor), randomX, randomY);
                     enemy->previousTile = dungeon.map[randomY][randomX];
                     dungeon.map[randomY][randomX] = enemy->monsterRender;
                     enemies.push_back(enemy);
