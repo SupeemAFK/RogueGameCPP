@@ -5,7 +5,7 @@
 
 
 ## Example Gameplay :
-![Gameplay footage](/images/image.png)
+![Gameplay footage](/images/roguegameimage.png)
 
 
   ## Objectives 🗒 ˎˊ˗ 
