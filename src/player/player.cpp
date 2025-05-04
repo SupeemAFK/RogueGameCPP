@@ -75,7 +75,7 @@ void::Player::movePlayer(vector<int> direction) {
                     enemy->damaged(netDamage);
 
                     char buffer[256];
-                    snprintf(buffer, sizeof(buffer), "Player attack %d damage", netDamage);
+                    snprintf(buffer, sizeof(buffer), "Player attack %.2f damage", netDamage);
                     gm->ui.addLog(string(buffer));
                     return;
                 } 

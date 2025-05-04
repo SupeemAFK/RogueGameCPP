@@ -89,7 +89,7 @@ void Enemy::checkNextToPlayer() {
             player->damaged(damage);
 
             char buffer[256];
-            snprintf(buffer, sizeof(buffer), "Enemy attack %d damage", damage);
+            snprintf(buffer, sizeof(buffer), "Enemy attack %.2f damage", damage);
             gm->ui.addLog(string(buffer));
         }
         else {
