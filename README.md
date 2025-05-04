@@ -31,7 +31,7 @@ To build and run the project, you will need the following:
 
 For **Linux-based systems (including WSL)**, you can install these dependencies with:
 
-```
+```bash
 sudo apt-get install build-essential libncursesw5-dev
 ```
 
