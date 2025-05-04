@@ -17,7 +17,9 @@ class Player {
         int playerFloor;
         int level;
         bool die = false;
+        float EXP;
         float maxHealth;
+        float baseAttack;
         
         Player(Dungeon* _dungeon, GameManager* _gm, float _maxHealth);
 
@@ -27,10 +29,13 @@ class Player {
         void damaged(float damage);
         void healPlayer(float amount);
         float getCurrentHealth();
+        float getCurrentExp();
         void resetPlayer();
         optional<Weapon> getPlayerWeapon();
         void setPlayerWeapon(Weapon weapon);
         void removeWeapon();
+        void increaseEXP(float exp);
+        void levelUP();
 
     private:
         Dungeon* dungeon;
@@ -39,6 +44,7 @@ class Player {
 
         char previousTile;
         float health;
+        float currentEXP;
 };
 
 #endif

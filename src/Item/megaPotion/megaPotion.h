@@ -6,7 +6,7 @@
 class MegaPotion : public Item {
     public:
         MegaPotion();
-        void use() override;
+        bool use() override;
 };
 
 #endif

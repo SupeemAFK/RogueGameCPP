@@ -24,7 +24,7 @@ class Item {
         virtual std::string getDescriptions() const;
         virtual char getItemRender() const;
 
-        virtual void use();
+        virtual bool use();
         virtual ~Item() {}
 
         bool operator==(const Item& other) const;

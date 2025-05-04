@@ -5,6 +5,8 @@ MegaPotion::MegaPotion()
     : Item("MegaPotion", "Restores FULL health when used.", 'm') //Like calling super()
 {}
 
-void MegaPotion::use() {
+bool MegaPotion::use() {
+    if (gm->player.getCurrentHealth() >= gm->player.maxHealth) return false;
     gm->player.healPlayer(100);
+    return true;
 }

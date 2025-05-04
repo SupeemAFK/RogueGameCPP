@@ -17,8 +17,9 @@ void Item::setGameManager(GameManager* _gm) {
     gm = _gm;
 }
 
-void Item::use() {
-    //Base
+//Base
+bool Item::use() {
+    return true;
 }
 
 int Item::getX() {

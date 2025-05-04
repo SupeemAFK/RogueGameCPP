@@ -10,8 +10,10 @@ Player::Player(Dungeon* _dungeon, GameManager* _gm, float _maxHealth) :
     playerFloor(1), 
     playerWeapon(nullopt),
     previousTile('.'), 
+    EXP(30),
     maxHealth(_maxHealth),
     health(_maxHealth),
+    baseAttack(15),
     dungeon(_dungeon), 
     gm(_gm)
 {}
@@ -58,7 +60,7 @@ void::Player::movePlayer(vector<int> direction) {
             float roll = static_cast<float>(rand()) / RAND_MAX;
             if (playerWeapon == nullopt) {
                 if (roll < 0.9) {
-                    enemy->damaged(15);
+                    enemy->damaged(baseAttack);
                     gm->ui.addLog("Player attack 15 damage.");
                     return;
                 } 
@@ -69,10 +71,11 @@ void::Player::movePlayer(vector<int> direction) {
             }
             else {
                 if (roll < playerWeapon->hitChance) {
-                    enemy->damaged(playerWeapon->damage);
+                    float netDamage = (baseAttack / 2) + playerWeapon->damage;
+                    enemy->damaged(netDamage);
 
                     char buffer[256];
-                    snprintf(buffer, sizeof(buffer), "Player attack %d damage", playerWeapon->damage);
+                    snprintf(buffer, sizeof(buffer), "Player attack %d damage", netDamage);
                     gm->ui.addLog(string(buffer));
                     return;
                 } 
@@ -147,4 +150,21 @@ void Player::setPlayerWeapon(Weapon weapon) {
 
 void Player::removeWeapon() {
     playerWeapon = nullopt;
+}
+
+void Player::increaseEXP(float exp) {
+    if (currentEXP + exp >= EXP) levelUP();
+    else currentEXP += exp;
+}
+
+void Player::levelUP() {
+    level += 1;
+    EXP = EXP * 1.35;
+    baseAttack += 3.5;
+    maxHealth += 10;
+    currentEXP = 0;
+}
+
+float Player::getCurrentExp() {
+    return currentEXP;
 }

@@ -11,7 +11,7 @@ class Weapon : public Item {
         Weapon(string weaponName, string weaponDescriptions, char weaponRender, float _damage, float _hitChance);
         float damage;
         float hitChance;
-        void use() override;
+        bool use() override;
 };
 
 #endif

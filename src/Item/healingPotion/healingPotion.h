@@ -6,7 +6,7 @@
 class HealingPotion : public Item {
     public:
         HealingPotion();
-        void use() override;
+        bool use() override;
 };
 
 #endif

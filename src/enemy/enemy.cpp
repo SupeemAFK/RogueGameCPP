@@ -104,6 +104,7 @@ void Enemy::damaged(float damage) {
 }
 
 void Enemy::die() {
+    gm->player.increaseEXP(8);
     dungeon->map[monsterY][monsterX] = previousTile;
     gm->removeEnemy(this);
 }

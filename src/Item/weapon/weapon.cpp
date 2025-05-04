@@ -7,6 +7,9 @@ Weapon::Weapon(string weaponName, string weaponDescriptions, char weaponRender, 
     hitChance(_hitChance)
 {}
 
-void Weapon::use() {
+bool Weapon::use() {
+    //Already have weapon
+    if (gm->player.getPlayerWeapon() != nullopt) return false;
     gm->player.setPlayerWeapon(*this);
+    return true;
 }

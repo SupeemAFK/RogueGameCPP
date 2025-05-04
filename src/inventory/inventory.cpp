@@ -45,8 +45,8 @@ void Inventory::discardItemFromInventory(Item* item) {
 void Inventory::useItem(int index) {
     if (index < 0 || index >= inventoryKeys.size()) return;    
     Item* item = inventoryKeys[index];
-    item->use();
-    decreaseItemAmount(item);
+    bool success = item->use();
+    if (success) decreaseItemAmount(item);
 }
 
 bool Inventory::isFull() {

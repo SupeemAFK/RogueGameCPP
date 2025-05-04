@@ -77,7 +77,9 @@ void GameUI::drawPlayerStatus() {
 
     mvwprintw(uiWin, y++, 2, "Player:");
     mvwprintw(uiWin, y++, 4, "Level: %d", gm->player.level);
+    mvwprintw(uiWin, y++, 4, "EXP: %d/%d", (int)gm->player.getCurrentExp(), (int)gm->player.EXP);
     mvwprintw(uiWin, y++, 4, "HP: %d/%d", (int)gm->player.getCurrentHealth(), (int)gm->player.maxHealth);
+    mvwprintw(uiWin, y++, 4, "STR: %d", (int)gm->player.baseAttack);
     mvwprintw(uiWin, y++, 4, "Coins: %d", gm->player.playerCoin);
 
     string weaponName = "Fist";
