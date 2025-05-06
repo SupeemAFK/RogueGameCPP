@@ -131,6 +131,10 @@ float Player::getCurrentHealth() {
 }
 
 void Player::resetPlayer() {
+    maxHealth = 100;
+    EXP = 30;
+    baseAttack = 15;
+    currentEXP = 0; 
     health = maxHealth;
     playerCoin = 0;
     playerFloor = 1;
